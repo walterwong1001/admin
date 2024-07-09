@@ -11,12 +11,12 @@ import (
 func RequestElapsedHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		start := time.Now()
+		defer func(ctx *gin.Context) {
+			duration := time.Since(start)
+			log.Printf("Request [Path: %s, Method: %s] duration: %v\n", c.Request.URL.Path, c.Request.Method, duration)
+		}(c)
 
 		// 让请求继续执行
 		c.Next()
-
-		duration := time.Since(start)
-
-		log.Printf("Request [Path: %s, Method: %s] duration: %v\n", c.Request.URL.Path, c.Request.Method, duration)
 	}
 }

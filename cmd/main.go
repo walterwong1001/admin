@@ -9,12 +9,12 @@ import (
 
 func main() {
 	r := gin.Default()
-	r.HandleMethodNotAllowed = true
+
 	// 初始化配置
 	config.Init()
 
 	r.Use(middleware.RequestElapsedHandler(), middleware.GlobalResponseHandler())
-
+	r.HandleMethodNotAllowed = true
 	r.NoRoute(middleware.NoRoute)
 	r.NoMethod(middleware.NoMethod)
 

@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"log"
 	"sync"
 
 	"github.com/gin-gonic/gin"
@@ -29,11 +28,9 @@ func (u *UserHandler) RegisterRoutes(r *gin.RouterGroup) {
 func (u *UserHandler) Create(c *gin.Context) {
 	var user models.User
 	if err := c.Bind(&user); err != nil {
-		log.Println("表单错误")
 		c.Error(err)
 		return
 	}
-	log.Printf("======%v", user)
 }
 
 func (u *UserHandler) GetUser(c *gin.Context) {

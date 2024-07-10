@@ -2,10 +2,12 @@ package middleware
 
 import (
 	"errors"
-	"github.com/gin-gonic/gin"
-	"github.com/weitien/admin/response"
 	"log"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
+	"github.com/weitien/admin/response"
 )
 
 // GlobalResponseHandler 全局统一响应Handler
@@ -17,7 +19,17 @@ func GlobalResponseHandler() gin.HandlerFunc {
 		if len(c.Errors) > 0 {
 			err := c.Errors.Last().Err
 			log.Println(err.Error())
-
+			var errs validator.ValidationErrors
+			if errors.As(err, &errs) {
+				validationErrors := errs.Translate(response.Translator)
+				log.Println(validationErrors)
+				c.JSON(http.StatusBadRequest, gin.H{
+					"Code":    http.StatusBadRequest,
+					"Message": validationErrors,
+				})
+				c.Abort()
+				return
+			}
 			var e *NotRouteOrNoMethodError
 			if errors.As(err, &e) {
 				// 处理 404 和 405 错误

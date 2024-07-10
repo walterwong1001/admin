@@ -3,7 +3,7 @@ package models
 type User struct {
 	ID    uint   `json:"id"`
 	Name  string `json:"name" binding:"required"` // 用户名
-	Email string `json:"email" binding:"required"`
+	Email string `json:"email" binding:"required,email"`
 	Phone string `json:"phone" binding:"required"`
 }
 

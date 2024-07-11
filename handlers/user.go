@@ -1,38 +1,42 @@
 package handlers
 
 import (
-	"sync"
-
 	"github.com/gin-gonic/gin"
 	"github.com/weitien/admin/models"
 	"github.com/weitien/admin/response"
+	"github.com/weitien/admin/service"
+	"time"
 )
 
-var m sync.Once
-
-type UserHandler struct{}
-
-func NewUserHandler() *UserHandler {
-	var instance *UserHandler
-	m.Do(func() {
-		instance = &UserHandler{}
-	})
-	return instance
+type userHandler struct {
+	Service service.UserService
 }
 
-func (u *UserHandler) RegisterRoutes(r *gin.RouterGroup) {
+func UserHandler() *userHandler {
+	return &userHandler{
+		Service: service.NewUserService(),
+	}
+}
+
+func (u *userHandler) RegisterRoutes(r *gin.RouterGroup) {
 	r.GET("/user", u.GetUser)
 	r.POST("/user", u.Create)
 }
 
-func (u *UserHandler) Create(c *gin.Context) {
+func (u *userHandler) Create(c *gin.Context) {
 	var user models.User
 	if err := c.Bind(&user); err != nil {
 		c.Error(err)
 		return
 	}
+	user.CreateTime = time.Now().UnixMilli()
+	err := u.Service.CreateUser(c.Request.Context(), &user)
+	if err != nil {
+		c.Error(err)
+	}
+	c.Abort()
 }
 
-func (u *UserHandler) GetUser(c *gin.Context) {
+func (u *userHandler) GetUser(c *gin.Context) {
 	c.Set(response.DATA_KEY, "Weitien")
 }

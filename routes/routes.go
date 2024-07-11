@@ -8,6 +8,6 @@ import (
 func RegisterRoutes(router *gin.Engine) {
 	group := router.Group("/api")
 
-	user := handlers.NewUserHandler()
+	user := handlers.UserHandler()
 	user.RegisterRoutes(group)
 }

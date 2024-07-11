@@ -13,19 +13,19 @@ type UserService interface {
 }
 
 type userServiceImpl struct {
-	repository        repository.UserRepository
-	accountRepository repository.AccountRepository
+	repository        repositories.UserRepository
+	accountRepository repositories.AccountRepository
 }
 
 func NewUserService() UserService {
 	return &userServiceImpl{
-		repository:        repository.NewUserRepository(),
-		accountRepository: repository.NewAccountRepository(),
+		repository:        repositories.NewUserRepository(),
+		accountRepository: repositories.NewAccountRepository(),
 	}
 }
 
 func (s *userServiceImpl) CreateUser(ctx context.Context, user *models.User) (err error) {
-	tx := repository.DB.Begin()
+	tx := repositories.DB.Begin()
 	if tx.Error != nil {
 		return tx.Error
 	}

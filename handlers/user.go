@@ -4,17 +4,17 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/weitien/admin/models"
 	"github.com/weitien/admin/response"
-	"github.com/weitien/admin/service"
+	"github.com/weitien/admin/services"
 	"time"
 )
 
 type userHandler struct {
-	Service service.UserService
+	Service services.UserService
 }
 
 func UserHandler() *userHandler {
 	return &userHandler{
-		Service: service.NewUserService(),
+		Service: services.NewUserService(),
 	}
 }
 

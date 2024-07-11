@@ -1,11 +1,11 @@
-package service
+package services
 
 import (
 	"context"
 	"time"
 
 	"github.com/weitien/admin/models"
-	"github.com/weitien/admin/repository"
+	"github.com/weitien/admin/repositories"
 )
 
 type UserService interface {

@@ -2,8 +2,8 @@ package repositories
 
 import (
 	"fmt"
+	"github.com/weitien/admin/global"
 	"log"
-	"sync"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -11,19 +11,18 @@ import (
 )
 
 var DB *gorm.DB
-var m sync.Once
 
-func InitDatabase() {
-	m.Do(func() {
-		dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local", "root", "root2024", "127.0.0.1", "3306", "admin")
-		db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
-			NamingStrategy: schema.NamingStrategy{
-				SingularTable: true, // 禁用表名复数
-			},
-		})
-		DB = db
-		if err != nil {
-			log.Fatal("failed to connect database", err)
-		}
+func init() {
+	cfg := global.CONFIG.MySQL
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local", cfg.Username, cfg.Password, cfg.Host, cfg.Port, cfg.Database)
+	var err error
+	DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{
+		NamingStrategy: schema.NamingStrategy{
+			SingularTable: true, // 禁用表名复数
+		},
 	})
+
+	if err != nil {
+		log.Fatal("Fatal error: failed to connect database", err)
+	}
 }

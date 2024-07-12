@@ -1,4 +1,4 @@
-package config
+package global
 
 import (
 	"log"
@@ -7,13 +7,13 @@ import (
 )
 
 const (
-	DEFAULT_CONFIG_NAME = "dev"
+	DEFAULT_CONFIG_NAME = "default"
 	DEFAULT_CONFIG_TYPE = "toml"
 	DEFAULT_CONFIG_PATH = "../deploy"
 	ENV_PREFIX          = "CONFIG"
 )
 
-var CONFIG *config = &config{}
+var CONFIG = &config{}
 
 func init() {
 	// Working with Environment Variables
@@ -48,7 +48,12 @@ type (
 	config struct {
 		Application string
 		Locale      string
+		Server      *server
 		MySQL       *mysql
+	}
+
+	server struct {
+		Port uint16
 	}
 
 	mysql struct {

@@ -1,6 +1,9 @@
 application = "cloud"
 
 locale = "zh"
+
+[server]
+    port = 8080
     
 [mysql]
     username = "root"

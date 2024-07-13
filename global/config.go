@@ -9,7 +9,7 @@ import (
 const (
 	DEFAULT_CONFIG_NAME = "default"
 	DEFAULT_CONFIG_TYPE = "toml"
-	DEFAULT_CONFIG_PATH = "../deploy"
+	DEFAULT_CONFIG_PATH = "./deploy"
 	ENV_PREFIX          = "CONFIG"
 )
 
@@ -50,6 +50,7 @@ type (
 		Locale      string
 		Server      *server
 		MySQL       *mysql
+		Snowflake   *snowflake
 	}
 
 	server struct {
@@ -62,5 +63,8 @@ type (
 		Host     string `toml:"host"`
 		Port     uint16 `toml:"port"`
 		Database string `toml:"database"`
+	}
+	snowflake struct {
+		Register string
 	}
 )

@@ -11,3 +11,6 @@ locale = "zh"
     host = "localhost"
     port = 3306
     database = "admin"
+
+[snowflake]
+    register = "mysql"

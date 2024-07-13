@@ -5,6 +5,7 @@ import (
 	"github.com/weitien/admin/models"
 	"github.com/weitien/admin/response"
 	"github.com/weitien/admin/services"
+	"github.com/weitien/admin/snowflake"
 	"time"
 )
 
@@ -29,6 +30,7 @@ func (u *userHandler) Create(c *gin.Context) {
 		c.Error(err)
 		return
 	}
+	user.ID, _ = snowflake.GetSnowflake().NextID()
 	user.CreateTime = time.Now().UnixMilli()
 	err := u.Service.CreateUser(c.Request.Context(), &user)
 	if err != nil {

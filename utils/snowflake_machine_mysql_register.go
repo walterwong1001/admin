@@ -17,14 +17,18 @@ func init() {
 	})
 }
 
-func (s *SnowflakeMachineMySQLRegister) NewMachine(m *snowflake.Machine) (*snowflake.Machine, error) {
+func (s *SnowflakeMachineMySQLRegister) Register(m *snowflake.Machine) (*snowflake.Machine, error) {
 	machine := &models.SnowflakeMachine{
 		ServiceName: m.ServiceName,
 		CreateTime:  time.Now().UnixMilli(),
 	}
-	_, err := s.Repository.NewMachine(machine)
+	_, err := s.Repository.Add(machine)
 	if err == nil {
 		m.ID = machine.ID
 	}
 	return m, err
+}
+
+func (s *SnowflakeMachineMySQLRegister) Unregister(id uint16) {
+	s.Repository.Remove(id)
 }

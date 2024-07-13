@@ -6,7 +6,11 @@ import (
 
 type SnowflakeMachineRepository struct{}
 
-func (s *SnowflakeMachineRepository) NewMachine(m *models.SnowflakeMachine) (*models.SnowflakeMachine, error) {
+func (s *SnowflakeMachineRepository) Add(m *models.SnowflakeMachine) (*models.SnowflakeMachine, error) {
 	err := DB.Create(m).Error
 	return m, err
+}
+
+func (s *SnowflakeMachineRepository) Remove(id uint16) {
+	DB.Delete(&models.SnowflakeMachine{}, id)
 }

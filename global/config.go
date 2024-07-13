@@ -9,7 +9,7 @@ import (
 const (
 	DEFAULT_CONFIG_NAME = "default"
 	DEFAULT_CONFIG_TYPE = "toml"
-	DEFAULT_CONFIG_PATH = "./deploy"
+	DEFAULT_CONFIG_PATH = "../deploy"
 	ENV_PREFIX          = "CONFIG"
 )
 

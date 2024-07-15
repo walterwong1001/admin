@@ -2,6 +2,8 @@ package services
 
 import (
 	"context"
+	"github.com/weitien/admin/machine"
+	"gorm.io/gorm"
 	"time"
 
 	"github.com/weitien/admin/models"
@@ -24,38 +26,26 @@ func NewUserService() UserService {
 	}
 }
 
-func (s *userServiceImpl) CreateUser(ctx context.Context, user *models.User) (err error) {
-	tx := repositories.DB.Begin()
-	if tx.Error != nil {
-		return tx.Error
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			tx.Rollback()
-		} else if err != nil {
-			tx.Rollback()
-		} else {
-			err = tx.Commit().Error
+func (s *userServiceImpl) CreateUser(ctx context.Context, user *models.User) error {
+	return repositories.GetDB().Transaction(func(tx *gorm.DB) error {
+		// 创建用户
+		if err := s.repository.CreateUser(ctx, tx, user); err != nil {
+			return err
 		}
-	}()
-
-	// 创建用户
-	if err = s.repository.CreateUser(ctx, user); err != nil {
-		return err
-	}
-
-	// 创建默认账户
-	if err = s.accountRepository.NewAccounts(ctx, s.getDefaultAccounts(user)); err != nil {
-		return err
-	}
-
-	return nil
+		// 创建默认账户
+		if err := s.accountRepository.NewAccounts(ctx, tx, s.getDefaultAccounts(user)); err != nil {
+			return err
+		}
+		return nil
+	})
 }
 
 func (s *userServiceImpl) getDefaultAccounts(u *models.User) []*models.Account {
+
+	snowflake := machine.GetSnowflake()
 	// Username Account
 	acc := models.Account{
-		ID:         1,
+		ID:         snowflake.NextID(),
 		UserID:     u.ID,
 		Identifier: u.Name,
 		Password:   "123",
@@ -65,12 +55,12 @@ func (s *userServiceImpl) getDefaultAccounts(u *models.User) []*models.Account {
 	}
 	// Email Account
 	emailAcc := acc
-	emailAcc.ID = 2
+	emailAcc.ID = snowflake.NextID()
 	emailAcc.Identifier = u.Email
 	emailAcc.Type = models.AccountTypeEmail
 	// Mobile Account
 	mobileAcc := acc
-	mobileAcc.ID = 3
+	mobileAcc.ID = machine.GetSnowflake().NextID()
 	mobileAcc.Identifier = u.Mobile
 	mobileAcc.Type = models.AccountTypeMobile
 

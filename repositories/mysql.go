@@ -10,13 +10,13 @@ import (
 	"gorm.io/gorm/schema"
 )
 
-var DB *gorm.DB
+var db *gorm.DB
 
 func init() {
 	cfg := global.CONFIG.MySQL
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local", cfg.Username, cfg.Password, cfg.Host, cfg.Port, cfg.Database)
 	var err error
-	DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{
+	db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{
 		NamingStrategy: schema.NamingStrategy{
 			SingularTable: true, // 禁用表名复数
 		},
@@ -25,4 +25,8 @@ func init() {
 	if err != nil {
 		log.Fatal("Fatal error: failed to connect database", err)
 	}
+}
+
+func GetDB() *gorm.DB {
+	return db
 }

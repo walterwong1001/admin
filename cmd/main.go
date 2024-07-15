@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"log"
 	"net/http"
@@ -10,8 +11,7 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/weitien/admin/snowflake"
-	_ "github.com/weitien/admin/utils"
+	"github.com/weitien/admin/machine"
 
 	"github.com/weitien/admin/global"
 
@@ -26,7 +26,7 @@ var machineId uint16
 func main() {
 	r := gin.Default()
 
-	machineId = snowflake.InitSnowFlake(global.CONFIG.Snowflake.Register, global.CONFIG.Application)
+	machineId = machine.InitSnowFlake(global.CONFIG.Snowflake.Register, global.CONFIG.Application)
 
 	if err := response.InitValidatorTranslator(global.CONFIG.Locale); err != nil {
 		log.Println("Init validator translator failed")
@@ -47,7 +47,7 @@ func main() {
 	}
 	// Start the server in a goroutine
 	go func() {
-		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+		if err := srv.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
 			log.Fatalf("listen: %s\n", err)
 		}
 	}()
@@ -58,7 +58,7 @@ func main() {
 }
 
 func gracefulShutdown(srv *http.Server) {
-	// Wait for interrupt signal to gracefully shutdown the server with a timeout of 5 seconds.
+	// Wait for interrupt signal to gracefully shutting down the server with a timeout of 5 seconds.
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, os.Interrupt, syscall.SIGTERM)
 	<-quit
@@ -68,12 +68,12 @@ func gracefulShutdown(srv *http.Server) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	// Attempt to gracefully shutdown the server
+	// Attempt to gracefully shutting down the server
 	if err := srv.Shutdown(ctx); err != nil {
 		log.Fatal("Server forced to shutdown:", err)
 	}
 
-	// Unregister the snowflake machine
-	snowflake.GetMachineRegister(global.CONFIG.Snowflake.Register).Unregister(machineId)
+	// Unregister the machine
+	machine.GetMachineRegister(global.CONFIG.Snowflake.Register).Unregister(machineId)
 	log.Println("Server exiting")
 }

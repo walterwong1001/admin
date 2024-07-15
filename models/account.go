@@ -11,9 +11,9 @@ const (
 )
 
 type Account struct {
-	ID         uint64      `json:"id" gorm:"column:id"`
-	UserID     uint64      `json:"user_id" gorm:"column:user_id"` // 外键，关联 User
-	Identifier string      `json:"identifier"`                    // 可以是手机号、邮箱或其他用户名
+	ID         uint64      `json:"id"`
+	UserID     uint64      `json:"user_id"`    // 外键，关联 User
+	Identifier string      `json:"identifier"` // 可以是手机号、邮箱或其他用户名
 	Password   string      `json:"password"`
 	Type       AccountType `json:"type"`
 	Status     uint        `json:"status"` // 账户状态（例如激活、锁定等）

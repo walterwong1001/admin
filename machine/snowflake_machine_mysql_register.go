@@ -1,9 +1,8 @@
-package utils
+package machine
 
 import (
 	"github.com/weitien/admin/models"
 	"github.com/weitien/admin/repositories"
-	"github.com/weitien/admin/snowflake"
 	"time"
 )
 
@@ -12,21 +11,21 @@ type SnowflakeMachineMySQLRegister struct {
 }
 
 func init() {
-	snowflake.Register("mysql", &SnowflakeMachineMySQLRegister{
+	Register("mysql", &SnowflakeMachineMySQLRegister{
 		Repository: &repositories.SnowflakeMachineRepository{},
 	})
 }
 
-func (s *SnowflakeMachineMySQLRegister) Register(m *snowflake.Machine) (*snowflake.Machine, error) {
-	machine := &models.SnowflakeMachine{
-		ServiceName: m.ServiceName,
+func (s *SnowflakeMachineMySQLRegister) Register(machine *Machine) (*Machine, error) {
+	m := &models.SnowflakeMachine{
+		ServiceName: machine.ServiceName,
 		CreateTime:  time.Now().UnixMilli(),
 	}
-	_, err := s.Repository.Add(machine)
+	_, err := s.Repository.Add(m)
 	if err == nil {
-		m.ID = machine.ID
+		machine.ID = m.ID
 	}
-	return m, err
+	return machine, err
 }
 
 func (s *SnowflakeMachineMySQLRegister) Unregister(id uint16) {

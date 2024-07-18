@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -21,12 +22,12 @@ func UserHandler() *userHandler {
 	}
 }
 
-func (u *userHandler) RegisterRoutes(r *gin.RouterGroup) {
-	r.GET("/user", u.GetUser)
-	r.POST("/user", u.Create)
+func (h *userHandler) RegisterRoutes(r *gin.RouterGroup) {
+	r.GET("/user/:id", h.GetUser)
+	r.POST("/user", h.Create)
 }
 
-func (u *userHandler) Create(c *gin.Context) {
+func (h *userHandler) Create(c *gin.Context) {
 	var user models.User
 	if err := c.Bind(&user); err != nil {
 		c.Error(err)
@@ -41,13 +42,18 @@ func (u *userHandler) Create(c *gin.Context) {
 	user.Password = ciphertext
 	user.CreateTime = time.Now().UnixMilli()
 
-	err = u.Service.CreateUser(c.Request.Context(), &user)
+	err = h.Service.CreateUser(c.Request.Context(), &user)
 	if err != nil {
 		c.Error(err)
+		c.Abort()
 	}
-	c.Abort()
 }
 
-func (u *userHandler) GetUser(c *gin.Context) {
-	c.Set(response.DATA_KEY, "Weitien")
+func (h *userHandler) GetUser(c *gin.Context) {
+	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
+	if err != nil {
+		c.Error(err)
+		c.Abort()
+	}
+	c.Set(response.DATA_KEY, h.Service.GetUser(c.Request.Context(), id))
 }

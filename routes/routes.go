@@ -8,6 +8,7 @@ import (
 func RegisterRoutes(router *gin.Engine) {
 	group := router.Group("/api")
 
-	user := handlers.UserHandler()
-	user.RegisterRoutes(group)
+	handlers.UserHandler().RegisterRoutes(group)
+
+	handlers.SignInHandler().RegisterRoutes(group)
 }

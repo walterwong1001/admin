@@ -1,11 +1,11 @@
 package models
 
 type User struct {
-	ID         uint64 `json:"machine"`
+	ID         uint64 `json:"id"`
 	Name       string `json:"name" binding:"required"` // 用户名
-	Email      string `json:"email" binding:"required,email"`
-	Mobile     string `json:"mobile" binding:"required"`
-	Password   string `json:"password" binding:"required" gorm:"-"`
+	Email      string `json:"email,omitempty" binding:"required,email"`
+	Mobile     string `json:"mobile,omitempty" binding:"required"`
+	Password   string `json:"password,omitempty" binding:"required" gorm:"-"`
 	CreateTime int64  `json:"create_time"`
 }
 

@@ -12,6 +12,7 @@ import (
 
 type UserService interface {
 	CreateUser(ctx context.Context, user *models.User) error
+	GetUser(ctx context.Context, id uint64) *models.User
 }
 
 type userServiceImpl struct {
@@ -38,6 +39,10 @@ func (s *userServiceImpl) CreateUser(ctx context.Context, user *models.User) err
 		}
 		return nil
 	})
+}
+
+func (s *userServiceImpl) GetUser(ctx context.Context, id uint64) *models.User {
+	return s.repository.GetUser(ctx, id)
 }
 
 func (s *userServiceImpl) getDefaultAccounts(u *models.User) []*models.Account {

@@ -2,9 +2,9 @@ package services
 
 import (
 	"context"
+
 	"github.com/weitien/admin/machine"
 	"gorm.io/gorm"
-	"time"
 
 	"github.com/weitien/admin/models"
 	"github.com/weitien/admin/repositories"
@@ -48,10 +48,10 @@ func (s *userServiceImpl) getDefaultAccounts(u *models.User) []*models.Account {
 		ID:         snowflake.NextID(),
 		UserID:     u.ID,
 		Identifier: u.Name,
-		Password:   "123",
+		Password:   u.Password,
 		Type:       models.AccountTypeUsername,
 		Status:     models.AccountActivity,
-		CreateTime: time.Now().UnixMilli(),
+		CreateTime: u.CreateTime,
 	}
 	// Email Account
 	emailAcc := acc

@@ -1,12 +1,14 @@
 package handlers
 
 import (
+	"time"
+
 	"github.com/gin-gonic/gin"
 	"github.com/weitien/admin/machine"
 	"github.com/weitien/admin/models"
 	"github.com/weitien/admin/response"
 	"github.com/weitien/admin/services"
-	"time"
+	"github.com/weitien/admin/utils"
 )
 
 type userHandler struct {
@@ -30,9 +32,16 @@ func (u *userHandler) Create(c *gin.Context) {
 		c.Error(err)
 		return
 	}
+	ciphertext, err := utils.Encode(user.Password)
+	if err != nil {
+		c.Error(err)
+		return
+	}
 	user.ID = machine.GetSnowflake().NextID()
+	user.Password = ciphertext
 	user.CreateTime = time.Now().UnixMilli()
-	err := u.Service.CreateUser(c.Request.Context(), &user)
+
+	err = u.Service.CreateUser(c.Request.Context(), &user)
 	if err != nil {
 		c.Error(err)
 	}

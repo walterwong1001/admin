@@ -24,10 +24,11 @@ func UserHandler() *userHandler {
 
 func (h *userHandler) RegisterRoutes(r *gin.RouterGroup) {
 	r.GET("/user/:id", h.GetUser)
-	r.POST("/user", h.Create)
+	r.POST("/user", h.CreateUser)
+	r.DELETE("/user/:id", h.DeleteUser)
 }
 
-func (h *userHandler) Create(c *gin.Context) {
+func (h *userHandler) CreateUser(c *gin.Context) {
 	var user models.User
 	if err := c.Bind(&user); err != nil {
 		c.Error(err)
@@ -56,4 +57,13 @@ func (h *userHandler) GetUser(c *gin.Context) {
 		c.Abort()
 	}
 	c.Set(response.DATA_KEY, h.Service.GetUser(c.Request.Context(), id))
+}
+
+func (h *userHandler) DeleteUser(c *gin.Context) {
+	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
+	if err != nil {
+		c.Error(err)
+		c.Abort()
+	}
+	h.Service.DeleteUser(c.Request.Context(), id)
 }

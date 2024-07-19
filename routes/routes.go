@@ -11,4 +11,6 @@ func RegisterRoutes(router *gin.Engine) {
 	handlers.UserHandler().RegisterRoutes(group)
 
 	handlers.SignInHandler().RegisterRoutes(group)
+
+	handlers.NewAccountHandler().RegisterRoutes(group)
 }

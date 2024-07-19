@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"context"
+
 	"gorm.io/gorm"
 
 	"github.com/weitien/admin/models"
@@ -10,6 +11,7 @@ import (
 type UserRepository interface {
 	CreateUser(cxt context.Context, db *gorm.DB, user *models.User) error
 	GetUser(cxt context.Context, id uint64) *models.User
+	DeleteUser(ctx context.Context, db *gorm.DB, id uint64)
 }
 
 type userRepositoryImpl struct {
@@ -27,4 +29,9 @@ func (r *userRepositoryImpl) GetUser(cxt context.Context, id uint64) *models.Use
 	var user models.User
 	db.First(&user, id)
 	return &user
+}
+
+func (r *userRepositoryImpl) DeleteUser(ctx context.Context, db *gorm.DB, id uint64) {
+	user := &models.User{ID: id}
+	db.Delete(user)
 }

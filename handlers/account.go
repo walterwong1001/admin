@@ -12,8 +12,8 @@ type accountHandler struct {
 	service services.AccountServicer
 }
 
-func NewAccountHandler() *accountHandler {
-	return &accountHandler{services.NewAccountService()}
+func AccountHandler() *accountHandler {
+	return &accountHandler{services.AccountService()}
 }
 
 func (h *accountHandler) RegisterRoutes(r *gin.RouterGroup) {

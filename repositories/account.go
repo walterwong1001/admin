@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"context"
+	"errors"
 
 	"gorm.io/gorm"
 
@@ -43,7 +44,7 @@ func (r *accountRepositoryImpl) GetAccountByType(ctx context.Context, db *gorm.D
 	var acc models.Account
 	tx := db.First(&acc, "identifier=? AND type=?", identifier, accType)
 	if tx.Error != nil {
-		if tx.Error == gorm.ErrRecordNotFound {
+		if errors.Is(tx.Error, gorm.ErrRecordNotFound) {
 			return nil
 		}
 	}

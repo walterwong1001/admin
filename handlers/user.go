@@ -31,12 +31,12 @@ func (h *userHandler) RegisterRoutes(r *gin.RouterGroup) {
 func (h *userHandler) CreateUser(c *gin.Context) {
 	var user models.User
 	if err := c.Bind(&user); err != nil {
-		c.Error(err)
+		_ = c.Error(err)
 		return
 	}
 	ciphertext, err := utils.Encode(user.Password)
 	if err != nil {
-		c.Error(err)
+		_ = c.Error(err)
 		return
 	}
 	user.ID = machine.GetSnowflake().NextID()
@@ -45,7 +45,7 @@ func (h *userHandler) CreateUser(c *gin.Context) {
 
 	err = h.Service.CreateUser(c.Request.Context(), &user)
 	if err != nil {
-		c.Error(err)
+		_ = c.Error(err)
 		c.Abort()
 	}
 }
@@ -53,7 +53,7 @@ func (h *userHandler) CreateUser(c *gin.Context) {
 func (h *userHandler) GetUser(c *gin.Context) {
 	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
 	if err != nil {
-		c.Error(err)
+		_ = c.Error(err)
 		c.Abort()
 	}
 	c.Set(response.DATA_KEY, h.Service.GetUser(c.Request.Context(), id))
@@ -62,7 +62,7 @@ func (h *userHandler) GetUser(c *gin.Context) {
 func (h *userHandler) DeleteUser(c *gin.Context) {
 	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
 	if err != nil {
-		c.Error(err)
+		_ = c.Error(err)
 		c.Abort()
 	}
 	h.Service.DeleteUser(c.Request.Context(), id)

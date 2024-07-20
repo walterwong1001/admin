@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"errors"
 	"github.com/gin-gonic/gin"
 	"github.com/weitien/admin/auth"
 	"github.com/weitien/admin/models"
@@ -19,16 +20,22 @@ func (h *authHandler) RegisterRoutes(r *gin.RouterGroup) {
 
 func (h *authHandler) Authenticate(c *gin.Context) {
 	var credential models.AuthCredential
-	if err := c.Bind(&credential); err != nil {
-		c.Error(err)
+	if err := c.BindJSON(&credential); err != nil {
+		_ = c.Error(err)
 		return
 	}
 
 	strategy := auth.GetAuthStrategy(credential.Type)
+	if strategy == nil {
+		_ = c.Error(errors.New("invalid authentication type"))
+		c.Abort()
+		return
+	}
 	acc, err := strategy.Authenticate(c, &credential)
 	if err != nil {
-		c.Error(err)
+		_ = c.Error(err)
 		c.Abort()
+		return
 	}
 	c.Set(response.DATA_KEY, acc)
 }

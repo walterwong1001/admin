@@ -9,11 +9,12 @@ import (
 	"github.com/weitien/admin/utils"
 )
 
+// 用户名密码认证
 type usernamePasswordAuthentication struct {
 	service services.AccountServicer
 }
 
-func UsernamePasswordAuthentication() AuthStrategy {
+func newUsernamePasswordAuthentication() AuthStrategy {
 	return &usernamePasswordAuthentication{services.AccountService()}
 }
 

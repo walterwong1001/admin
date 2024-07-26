@@ -14,3 +14,8 @@ locale = "zh"
 
 [snowflake]
     register = "mysql"
+
+[jwt]
+    secret_key = "1234567890!@#$%^&*()qwertyuiop"
+    issuer = "cloud"
+    days = 7

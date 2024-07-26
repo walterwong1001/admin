@@ -2,13 +2,19 @@ package handlers
 
 import (
 	"errors"
+	"strconv"
+
 	"github.com/gin-gonic/gin"
 	"github.com/weitien/admin/auth"
+	"github.com/weitien/admin/global"
 	"github.com/weitien/admin/models"
 	"github.com/weitien/admin/response"
+	"github.com/weitien/admin/token"
 )
 
 type authHandler struct{}
+
+var jwt = global.CONFIG.Jwt
 
 func AuthHandler() *authHandler {
 	return &authHandler{}
@@ -37,5 +43,12 @@ func (h *authHandler) Authenticate(c *gin.Context) {
 		c.Abort()
 		return
 	}
-	c.Set(response.DATA_KEY, acc)
+	sub := strconv.Itoa(int(acc.UserID))
+	token, err := token.NewJWT(sub, sub, jwt.Days, jwt.SecretKey, jwt.Issuer)
+	if err != nil {
+		_ = c.Error(err)
+		c.Abort()
+		return
+	}
+	c.Set(response.DATA_KEY, token)
 }

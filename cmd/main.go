@@ -22,13 +22,14 @@ import (
 )
 
 var machineId uint16
+var conf = global.CONFIG
 
 func main() {
 	r := gin.Default()
 
-	machineId = machine.InitSnowFlake(global.CONFIG.Snowflake.Register, global.CONFIG.Application)
+	machineId = machine.InitSnowFlake(conf.Snowflake.Register, conf.Application)
 
-	if err := response.InitValidatorTranslator(global.CONFIG.Locale); err != nil {
+	if err := response.InitValidatorTranslator(conf.Locale); err != nil {
 		log.Println("Init validator translator failed")
 	}
 
@@ -42,7 +43,7 @@ func main() {
 
 	// Create the server
 	srv := &http.Server{
-		Addr:    fmt.Sprintf(":%d", global.CONFIG.Server.Port),
+		Addr:    fmt.Sprintf(":%d", conf.Server.Port),
 		Handler: r,
 	}
 	// Start the server in a goroutine
@@ -51,8 +52,9 @@ func main() {
 			log.Fatalf("listen: %s\n", err)
 		}
 	}()
+
 	// Print the current process ID
-	fmt.Printf("Current process ID: %d\n", os.Getpid())
+	log.Printf("Current process ID: %d\n", os.Getpid())
 
 	gracefulShutdown(srv)
 }
@@ -74,6 +76,6 @@ func gracefulShutdown(srv *http.Server) {
 	}
 
 	// Unregister the machine
-	machine.GetMachineRegister(global.CONFIG.Snowflake.Register).Unregister(machineId)
+	machine.GetMachineRegister(conf.Snowflake.Register).Unregister(machineId)
 	log.Println("Server exiting")
 }

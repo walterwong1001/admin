@@ -51,6 +51,7 @@ type (
 		Server      *server
 		MySQL       *mysql
 		Snowflake   *snowflake
+		Jwt         *jwt
 	}
 
 	server struct {
@@ -58,13 +59,19 @@ type (
 	}
 
 	mysql struct {
-		Username string `toml:"username"`
-		Password string `toml:"password"`
-		Host     string `toml:"host"`
-		Port     uint16 `toml:"port"`
-		Database string `toml:"database"`
+		Username string
+		Password string
+		Host     string
+		Port     uint16
+		Database string
 	}
 	snowflake struct {
 		Register string
+	}
+
+	jwt struct {
+		SecretKey string `mapstructure:"secret_key"`
+		Issuer    string
+		Days      int // 有效天数
 	}
 )

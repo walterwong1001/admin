@@ -3,7 +3,6 @@ package handlers
 import (
 	"errors"
 	"github.com/gin-gonic/gin"
-	"github.com/weitien/admin/machine"
 	"github.com/weitien/admin/models"
 	"github.com/weitien/admin/services"
 )
@@ -29,7 +28,7 @@ func (h *navigationHandler) New(c *gin.Context) {
 		return
 	}
 
-	nav.ID = machine.NextID()
+	nav.ID = nextId()
 
 	if err := h.service.New(c.Request.Context(), &nav); err != nil {
 		abort(c, err)

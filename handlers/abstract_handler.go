@@ -3,6 +3,7 @@ package handlers
 import (
 	"errors"
 	"github.com/gin-gonic/gin"
+	"github.com/weitien/admin/machine"
 	"log"
 	"strconv"
 )
@@ -25,4 +26,8 @@ func abortWithMessage(c *gin.Context, err error, text string) {
 	}
 	_ = c.Error(err)
 	c.Abort()
+}
+
+func nextId() uint64 {
+	return machine.NextID()
 }

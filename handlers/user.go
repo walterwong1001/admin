@@ -4,7 +4,6 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/weitien/admin/machine"
 	"github.com/weitien/admin/models"
 	"github.com/weitien/admin/response"
 	"github.com/weitien/admin/services"
@@ -38,7 +37,7 @@ func (h *userHandler) New(c *gin.Context) {
 		_ = c.Error(err)
 		return
 	}
-	user.ID = machine.NextID()
+	user.ID = nextId()
 	user.Password = ciphertext
 	user.CreateTime = time.Now().UnixMilli()
 

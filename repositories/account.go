@@ -3,10 +3,8 @@ package repositories
 import (
 	"context"
 	"errors"
-
-	"gorm.io/gorm"
-
 	"github.com/weitien/admin/models"
+	"gorm.io/gorm"
 )
 
 type AccountRepository interface {

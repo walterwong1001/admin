@@ -2,8 +2,6 @@ package handlers
 
 import (
 	"errors"
-	"strconv"
-
 	"github.com/gin-gonic/gin"
 	"github.com/weitien/admin/machine"
 	"github.com/weitien/admin/models"
@@ -39,7 +37,7 @@ func (h *navigationHandler) New(c *gin.Context) {
 }
 
 func (h *navigationHandler) Delete(c *gin.Context) {
-	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
+	id, err := getPathParamAsInt(c, "id")
 	if err != nil {
 		abort(c, err)
 		return

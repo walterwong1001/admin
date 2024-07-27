@@ -1,1 +1,31 @@
-package {{.PackageName}}
+package repositories
+
+import (
+	"context"
+	"github.com/weitien/admin/models"
+	"gorm.io/gorm"
+)
+
+type {{.UpperName}}Repository interface {
+    New(ctx context.Context, db *gorm.DB, obj *models.{{.UpperName}}) error
+    Delete(ctx context.Context, db *gorm.DB, id uint64) error
+    Update(ctx context.Context, db *gorm.DB, obj *models.{{.UpperName}}) error
+}
+
+type {{.LowerName}}RepositoryImpl struct{}
+
+func New{{.UpperName}}Repository() {{.UpperName}}Repository {
+	return &{{.LowerName}}RepositoryImpl{}
+}
+
+func (r *{{.LowerName}}RepositoryImpl) New(ctx context.Context, db *gorm.DB, obj *models.{{.UpperName}}) error {
+	return db.WithContext(ctx).Create(obj).Error
+}
+
+func (r *{{.LowerName}}RepositoryImpl) Delete(ctx context.Context, db *gorm.DB, id uint64) error {
+	return db.WithContext(ctx).Delete(&models.{{.UpperName}}{ID: id}).Error
+}
+
+func (r *{{.LowerName}}RepositoryImpl) Update(ctx context.Context, db *gorm.DB, obj *models.{{.UpperName}}) error {
+	return db.WithContext(ctx).Save(obj).Error
+}

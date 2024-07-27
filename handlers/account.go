@@ -1,8 +1,6 @@
 package handlers
 
 import (
-	"strconv"
-
 	"github.com/gin-gonic/gin"
 	"github.com/weitien/admin/models"
 	"github.com/weitien/admin/services"
@@ -22,19 +20,25 @@ func (h *accountHandler) RegisterRoutes(r *gin.RouterGroup) {
 }
 
 func (h *accountHandler) LockAccount(c *gin.Context) {
-	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
+	id, err := getPathParamAsInt(c, "id")
 	if err != nil {
-		_ = c.Error(err)
-		c.Abort()
+		abort(c, err)
+		return
 	}
-	h.service.ChangeAccountStatus(c.Request.Context(), id, models.AccountLocked)
+
+	if err := h.service.ChangeAccountStatus(c.Request.Context(), id, models.AccountLocked); err != nil {
+		abortWithMessage(c, err, "failed to lock account")
+	}
 }
 
 func (h *accountHandler) ActivateAccount(c *gin.Context) {
-	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
+	id, err := getPathParamAsInt(c, "id")
 	if err != nil {
-		_ = c.Error(err)
-		c.Abort()
+		abort(c, err)
+		return
 	}
-	h.service.ChangeAccountStatus(c.Request.Context(), id, models.AccountActivity)
+
+	if err := h.service.ChangeAccountStatus(c.Request.Context(), id, models.AccountActivity); err != nil {
+		abortWithMessage(c, err, "failed to activate account")
+	}
 }

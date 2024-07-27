@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -13,22 +12,22 @@ import (
 )
 
 type userHandler struct {
-	Service services.UserService
+	service services.UserService
 }
 
 func UserHandler() *userHandler {
 	return &userHandler{
-		Service: services.NewUserService(),
+		service: services.NewUserService(),
 	}
 }
 
 func (h *userHandler) RegisterRoutes(r *gin.RouterGroup) {
-	r.GET("/user/:id", h.GetUser)
-	r.POST("/user", h.CreateUser)
-	r.DELETE("/user/:id", h.DeleteUser)
+	r.GET("/user/:id", h.Get)
+	r.POST("/user", h.New)
+	r.DELETE("/user/:id", h.Delete)
 }
 
-func (h *userHandler) CreateUser(c *gin.Context) {
+func (h *userHandler) New(c *gin.Context) {
 	var user models.User
 	if err := c.Bind(&user); err != nil {
 		_ = c.Error(err)
@@ -39,31 +38,33 @@ func (h *userHandler) CreateUser(c *gin.Context) {
 		_ = c.Error(err)
 		return
 	}
-	user.ID = machine.GetSnowflake().NextID()
+	user.ID = machine.NextID()
 	user.Password = ciphertext
 	user.CreateTime = time.Now().UnixMilli()
 
-	err = h.Service.CreateUser(c.Request.Context(), &user)
-	if err != nil {
+	if err = h.service.New(c.Request.Context(), &user); err != nil {
 		_ = c.Error(err)
 		c.Abort()
 	}
 }
 
-func (h *userHandler) GetUser(c *gin.Context) {
-	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
+func (h *userHandler) Get(c *gin.Context) {
+	id, err := getPathParamAsInt(c, "id")
 	if err != nil {
-		_ = c.Error(err)
-		c.Abort()
+		abort(c, err)
+		return
 	}
-	c.Set(response.DATA_KEY, h.Service.GetUser(c.Request.Context(), id))
+	c.Set(response.DATA_KEY, h.service.Get(c.Request.Context(), id))
 }
 
-func (h *userHandler) DeleteUser(c *gin.Context) {
-	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
+func (h *userHandler) Delete(c *gin.Context) {
+	id, err := getPathParamAsInt(c, "id")
 	if err != nil {
-		_ = c.Error(err)
-		c.Abort()
+		abort(c, err)
+		return
 	}
-	h.Service.DeleteUser(c.Request.Context(), id)
+
+	if err := h.service.Delete(c.Request.Context(), id); err != nil {
+		abortWithMessage(c, err, "failed to delete user")
+	}
 }

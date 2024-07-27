@@ -13,4 +13,6 @@ func RegisterRoutes(router *gin.Engine) {
 	handlers.UserHandler().RegisterRoutes(group)
 
 	handlers.AccountHandler().RegisterRoutes(group)
+
+	handlers.NavigationHandler().RegisterRoutes(group)
 }

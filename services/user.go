@@ -11,9 +11,9 @@ import (
 )
 
 type UserService interface {
-	CreateUser(ctx context.Context, user *models.User) error
-	GetUser(ctx context.Context, id uint64) *models.User
-	DeleteUser(ctx context.Context, id uint64)
+	New(ctx context.Context, user *models.User) error
+	Get(ctx context.Context, id uint64) *models.User
+	Delete(ctx context.Context, id uint64) error
 }
 
 type userServiceImpl struct {
@@ -28,10 +28,10 @@ func NewUserService() UserService {
 	}
 }
 
-func (s *userServiceImpl) CreateUser(ctx context.Context, user *models.User) error {
+func (s *userServiceImpl) New(ctx context.Context, user *models.User) error {
 	return repositories.GetDB().Transaction(func(tx *gorm.DB) error {
 		// 创建用户
-		if err := s.repository.CreateUser(ctx, tx, user); err != nil {
+		if err := s.repository.New(ctx, tx, user); err != nil {
 			return err
 		}
 		// 创建默认账户
@@ -42,15 +42,17 @@ func (s *userServiceImpl) CreateUser(ctx context.Context, user *models.User) err
 	})
 }
 
-func (s *userServiceImpl) GetUser(ctx context.Context, id uint64) *models.User {
-	return s.repository.GetUser(ctx, id)
+func (s *userServiceImpl) Get(ctx context.Context, id uint64) *models.User {
+	return s.repository.Get(ctx, id)
 }
 
-func (s *userServiceImpl) DeleteUser(ctx context.Context, id uint64) {
-	repositories.GetDB().Transaction(func(tx *gorm.DB) error {
-		s.repository.DeleteUser(ctx, tx, id)
-		s.accountRepository.DeleteAccounts(ctx, tx, id)
-		return nil
+func (s *userServiceImpl) Delete(ctx context.Context, id uint64) error {
+	return repositories.GetDB().Transaction(func(tx *gorm.DB) error {
+		err := s.repository.Delete(ctx, tx, id)
+		if err != nil {
+			return err
+		}
+		return s.accountRepository.Delete(ctx, tx, id)
 	})
 }
 

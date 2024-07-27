@@ -11,7 +11,7 @@ import (
 var once sync.Once
 
 type AccountServicer interface {
-	ChangeAccountStatus(ctx context.Context, id uint64, status uint8)
+	ChangeAccountStatus(ctx context.Context, id uint64, status uint8) error
 	GetAccountByType(ctx context.Context, identifier string, accType models.AccountType) *models.Account
 }
 
@@ -27,10 +27,10 @@ func AccountService() AccountServicer {
 	return service
 }
 
-func (s *accountService) ChangeAccountStatus(ctx context.Context, id uint64, status uint8) {
-	s.repository.ChangeAccountStatus(ctx, repositories.GetDB(), id, status)
+func (s *accountService) ChangeAccountStatus(ctx context.Context, id uint64, status uint8) error {
+	return s.repository.ChangeStatus(ctx, repositories.GetDB(), id, status)
 }
 
 func (s *accountService) GetAccountByType(ctx context.Context, identifier string, accType models.AccountType) *models.Account {
-	return s.repository.GetAccountByType(ctx, repositories.GetDB(), identifier, accType)
+	return s.repository.GetByType(ctx, repositories.GetDB(), identifier, accType)
 }

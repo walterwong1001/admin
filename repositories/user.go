@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"context"
+	"errors"
 
 	"gorm.io/gorm"
 
@@ -9,9 +10,9 @@ import (
 )
 
 type UserRepository interface {
-	CreateUser(cxt context.Context, db *gorm.DB, user *models.User) error
-	GetUser(cxt context.Context, id uint64) *models.User
-	DeleteUser(ctx context.Context, db *gorm.DB, id uint64)
+	New(cxt context.Context, db *gorm.DB, user *models.User) error
+	Get(cxt context.Context, id uint64) *models.User
+	Delete(ctx context.Context, db *gorm.DB, id uint64) error
 }
 
 type userRepositoryImpl struct {
@@ -21,17 +22,21 @@ func NewUserRepository() UserRepository {
 	return &userRepositoryImpl{}
 }
 
-func (r *userRepositoryImpl) CreateUser(cxt context.Context, db *gorm.DB, user *models.User) error {
+func (r *userRepositoryImpl) New(cxt context.Context, db *gorm.DB, user *models.User) error {
 	return db.WithContext(cxt).Create(user).Error
 }
 
-func (r *userRepositoryImpl) GetUser(cxt context.Context, id uint64) *models.User {
+func (r *userRepositoryImpl) Get(cxt context.Context, id uint64) *models.User {
 	var user models.User
-	db.First(&user, id)
+	tx := db.WithContext(cxt).First(&user, id)
+	if tx.Error != nil {
+		if errors.Is(tx.Error, gorm.ErrRecordNotFound) {
+			return nil
+		}
+	}
 	return &user
 }
 
-func (r *userRepositoryImpl) DeleteUser(ctx context.Context, db *gorm.DB, id uint64) {
-	user := &models.User{ID: id}
-	db.Delete(user)
+func (r *userRepositoryImpl) Delete(ctx context.Context, db *gorm.DB, id uint64) error {
+	return db.WithContext(ctx).Delete(&models.User{ID: id}).Error
 }

@@ -27,28 +27,25 @@ func (h *authHandler) RegisterRoutes(r *gin.RouterGroup) {
 func (h *authHandler) Authenticate(c *gin.Context) {
 	var credential models.AuthCredential
 	if err := c.BindJSON(&credential); err != nil {
-		_ = c.Error(err)
+		abort(c, err)
 		return
 	}
 
 	strategy := auth.GetAuthStrategy(credential.Type)
 	if strategy == nil {
-		_ = c.Error(errors.New("invalid authentication type"))
-		c.Abort()
+		abort(c, errors.New("invalid authentication type"))
 		return
 	}
 	acc, err := strategy.Authenticate(c, &credential)
 	if err != nil {
-		_ = c.Error(err)
-		c.Abort()
+		abort(c, err)
 		return
 	}
 	sub := strconv.Itoa(int(acc.UserID))
-	token, err := token.NewJWT(sub, sub, jwt.Days, jwt.SecretKey, jwt.Issuer)
+	jwt, err := token.NewJWT(sub, sub, jwt.Days, jwt.SecretKey, jwt.Issuer)
 	if err != nil {
-		_ = c.Error(err)
-		c.Abort()
+		abort(c, err)
 		return
 	}
-	c.Set(response.DATA_KEY, token)
+	c.Set(response.DATA_KEY, jwt)
 }

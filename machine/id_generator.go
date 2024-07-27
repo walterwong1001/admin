@@ -30,3 +30,7 @@ func InitSnowFlake(key, serviceName string) uint16 {
 func GetSnowflake() *snowflake.Snowflake {
 	return generator
 }
+
+func NextID() uint64 {
+	return generator.NextID()
+}

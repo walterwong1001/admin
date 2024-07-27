@@ -1,0 +1,7 @@
+package models
+
+type {{.StructName}} struct {
+{{- range .Fields}}
+{{.Name}} {{.Type}}
+{{- end}}
+}

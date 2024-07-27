@@ -2,10 +2,12 @@ package handlers
 
 import (
 	"errors"
-	"github.com/gin-gonic/gin"
-	"github.com/weitien/admin/machine"
 	"log"
 	"strconv"
+	"time"
+
+	"github.com/gin-gonic/gin"
+	"github.com/weitien/admin/machine"
 )
 
 type AbstractHandler struct {
@@ -30,4 +32,8 @@ func abortWithMessage(c *gin.Context, err error, text string) {
 
 func nextId() uint64 {
 	return machine.NextID()
+}
+
+func createTime() int64 {
+	return time.Now().UnixMilli()
 }

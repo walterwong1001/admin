@@ -25,7 +25,8 @@ func main() {
 		Fields: []Field{
 			{Name: "ID", Type: "uint64"},
 			{Name: "Name", Type: "string"},
-			{Name: "CreateTime", Type: "uint64"},
+			{Name: "Description", Type: "string"},
+			{Name: "CreateTime", Type: "int64"},
 		},
 	}
 

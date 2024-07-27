@@ -2,17 +2,14 @@ package routes
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/weitien/admin/handlers"
+	h "github.com/weitien/admin/handlers"
 )
 
 func RegisterRoutes(router *gin.Engine) {
 	group := router.Group("/api")
+	routers := []Router{h.AuthHandler(), h.UserHandler(), h.AccountHandler(), h.NavigationHandler(), h.RoleHandler()}
 
-	handlers.AuthHandler().RegisterRoutes(group)
-
-	handlers.UserHandler().RegisterRoutes(group)
-
-	handlers.AccountHandler().RegisterRoutes(group)
-
-	handlers.NavigationHandler().RegisterRoutes(group)
+	for _, r := range routers {
+		r.RegisterRoutes(group)
+	}
 }

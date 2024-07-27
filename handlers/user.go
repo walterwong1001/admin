@@ -1,8 +1,6 @@
 package handlers
 
 import (
-	"time"
-
 	"github.com/gin-gonic/gin"
 	"github.com/weitien/admin/models"
 	"github.com/weitien/admin/response"
@@ -39,7 +37,7 @@ func (h *userHandler) New(c *gin.Context) {
 	}
 	user.ID = nextId()
 	user.Password = ciphertext
-	user.CreateTime = time.Now().UnixMilli()
+	user.CreateTime = createTime()
 
 	if err = h.service.New(c.Request.Context(), &user); err != nil {
 		_ = c.Error(err)

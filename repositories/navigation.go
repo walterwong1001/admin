@@ -27,5 +27,5 @@ func (r *navigationRepositoryImpl) Delete(ctx context.Context, db *gorm.DB, id u
 }
 
 func (r *navigationRepositoryImpl) Update(ctx context.Context, db *gorm.DB, nav *models.Navigation) error {
-	return db.WithContext(ctx).Save(nav).Error
+	return db.WithContext(ctx).Updates(nav).Error
 }

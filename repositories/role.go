@@ -7,9 +7,9 @@ import (
 )
 
 type RoleRepository interface {
-    New(ctx context.Context, db *gorm.DB, obj *models.Role) error
-    Delete(ctx context.Context, db *gorm.DB, id uint64) error
-    Update(ctx context.Context, db *gorm.DB, obj *models.Role) error
+	New(ctx context.Context, db *gorm.DB, obj *models.Role) error
+	Delete(ctx context.Context, db *gorm.DB, id uint64) error
+	Update(ctx context.Context, db *gorm.DB, obj *models.Role) error
 }
 
 type roleRepositoryImpl struct{}
@@ -27,5 +27,5 @@ func (r *roleRepositoryImpl) Delete(ctx context.Context, db *gorm.DB, id uint64)
 }
 
 func (r *roleRepositoryImpl) Update(ctx context.Context, db *gorm.DB, obj *models.Role) error {
-	return db.WithContext(ctx).Save(obj).Error
+	return db.WithContext(ctx).Updates(obj).Error
 }

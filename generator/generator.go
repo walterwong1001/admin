@@ -1,10 +1,10 @@
 package main
 
 import (
-	"html/template"
 	"os"
 	"path/filepath"
 	"strings"
+	"text/template"
 )
 
 type Field struct {

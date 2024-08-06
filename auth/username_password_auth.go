@@ -2,11 +2,10 @@ package auth
 
 import (
 	"errors"
-
 	"github.com/gin-gonic/gin"
-	"github.com/weitien/admin/models"
-	"github.com/weitien/admin/services"
-	"github.com/weitien/admin/utils"
+	"github.com/weitien/admin/pkg/models"
+	"github.com/weitien/admin/pkg/services"
+	"github.com/weitien/admin/pkg/utils"
 )
 
 // 用户名密码认证

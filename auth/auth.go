@@ -2,7 +2,7 @@ package auth
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/weitien/admin/models"
+	"github.com/weitien/admin/pkg/models"
 )
 
 // 策略容器

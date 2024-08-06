@@ -4,21 +4,18 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/gin-gonic/gin"
+	"github.com/weitien/admin/middleware"
+	"github.com/weitien/admin/pkg/global"
+	"github.com/weitien/admin/pkg/machine"
+	"github.com/weitien/admin/pkg/routes"
+	"github.com/weitien/admin/pkg/validator"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
-
-	"github.com/weitien/admin/machine"
-
-	"github.com/weitien/admin/global"
-
-	"github.com/gin-gonic/gin"
-	"github.com/weitien/admin/middleware"
-	"github.com/weitien/admin/response"
-	"github.com/weitien/admin/routes"
 )
 
 var machineId uint16
@@ -29,10 +26,7 @@ func main() {
 
 	machineId = machine.InitSnowFlake(conf.Snowflake.Register, conf.Application)
 
-	if err := response.InitValidatorTranslator(conf.Locale); err != nil {
-		log.Println("Init validator translator failed")
-	}
-
+	validator.InitValidator()
 	r.Use(middleware.RequestElapsedHandler(), middleware.GlobalResponseHandler())
 	r.HandleMethodNotAllowed = true
 	r.NoRoute(middleware.NoRoute)

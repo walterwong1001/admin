@@ -7,7 +7,15 @@ import (
 
 func RegisterRoutes(router *gin.Engine) {
 	group := router.Group("/api")
-	routers := []Router{handlers.AuthHandler(), handlers.UserHandler(), handlers.AccountHandler(), handlers.NavigationHandler(), handlers.RoleHandler(), handlers.PermissionHandler()}
+	routers := []Router{
+		handlers.AuthHandler(),
+		handlers.UserHandler(),
+		handlers.AccountHandler(),
+		handlers.NavigationHandler(),
+		handlers.RoleHandler(),
+		handlers.PermissionHandler(),
+		handlers.RolePermissionHandler(),
+	}
 
 	for _, r := range routers {
 		r.RegisterRoutes(group)

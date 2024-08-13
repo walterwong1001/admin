@@ -33,11 +33,11 @@ func InitValidator() {
 		}
 
 		// 注册自定义验证器
-		if err := v.RegisterValidation("method", httpMethodValidator); err != nil {
+		if err := v.RegisterValidation("http_method", httpMethodValidator); err != nil {
 			panic(fmt.Sprintf("Failed to register validation: %v", err))
 		}
 
-		//// 注册自定义翻译器
+		// 注册自定义翻译器
 		//v.RegisterTagNameFunc(func(fld reflect.StructField) string {
 		//	name := fld.Tag.Get("json")
 		//	if name == "" {
@@ -69,8 +69,8 @@ func registerCustomTranslations(validate *validator.Validate, trans ut.Translato
 		return ut.Add("url", "{0} must be a valid URL", true)
 	}, translate)
 
-	_ = validate.RegisterTranslation("method", trans, func(ut ut.Translator) error {
-		return ut.Add("method", "{0} must be a valid HTTP method (GET, POST, PUT, DELETE, OPTIONS, HEAD)", true)
+	_ = validate.RegisterTranslation("http_method", trans, func(ut ut.Translator) error {
+		return ut.Add("http_method", "{0} must be a valid HTTP method (GET, POST, PUT, DELETE, OPTIONS, HEAD)", true)
 	}, translate)
 
 	_ = validate.RegisterTranslation("gte", trans, func(ut ut.Translator) error {

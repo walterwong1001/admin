@@ -19,6 +19,7 @@ func (h *permissionHandler) RegisterRoutes(r *gin.RouterGroup) {
 	r.POST("/permission", h.New)
 	r.DELETE("/permission/:id", h.Delete)
 	r.PUT("/permission", h.Update)
+	r.GET("/permission/all", h.All)
 }
 
 func (h *permissionHandler) New(c *gin.Context) {
@@ -63,4 +64,9 @@ func (h *permissionHandler) Update(c *gin.Context) {
 	if err := h.service.Update(c.Request.Context(), &obj); err != nil {
 		abortWithMessage(c, err, "failed to update permission")
 	}
+}
+
+func (h *permissionHandler) All(c *gin.Context) {
+	arr := h.service.All(c)
+	render(c, arr)
 }

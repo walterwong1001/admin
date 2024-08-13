@@ -7,8 +7,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// RequestElapsedHandler 请求耗时处理器
-func RequestElapsedHandler() gin.HandlerFunc {
+// RequestElapsed 请求耗时处理器
+func RequestElapsed() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		start := time.Now()
 		defer func(ctx *gin.Context) {

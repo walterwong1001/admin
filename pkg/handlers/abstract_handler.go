@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/gin-gonic/gin"
 	"github.com/weitien/admin/pkg/machine"
+	"github.com/weitien/admin/pkg/response"
 	"strconv"
 	"time"
 )
@@ -33,4 +34,8 @@ func nextId() uint64 {
 
 func createTime() int64 {
 	return time.Now().UnixMilli()
+}
+
+func render(c *gin.Context, data any) {
+	c.Set(response.DATA_KEY, data)
 }

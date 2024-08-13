@@ -3,7 +3,6 @@ package handlers
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/weitien/admin/pkg/models"
-	"github.com/weitien/admin/pkg/response"
 	"github.com/weitien/admin/pkg/services"
 	"github.com/weitien/admin/pkg/utils"
 )
@@ -51,7 +50,7 @@ func (h *userHandler) Get(c *gin.Context) {
 		abort(c, err)
 		return
 	}
-	c.Set(response.DATA_KEY, h.service.Get(c.Request.Context(), id))
+	render(c, h.service.Get(c.Request.Context(), id))
 }
 
 func (h *userHandler) Delete(c *gin.Context) {

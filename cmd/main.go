@@ -27,7 +27,7 @@ func main() {
 	machineId = machine.InitSnowFlake(conf.Snowflake.Register, conf.Application)
 
 	validator.InitValidator()
-	r.Use(middleware.RequestElapsedHandler(), middleware.GlobalResponseHandler())
+	r.Use(middleware.Authorization(), middleware.RequestElapsed(), middleware.GlobalResponse())
 	r.HandleMethodNotAllowed = true
 	r.NoRoute(middleware.NoRoute)
 	r.NoMethod(middleware.NoMethod)

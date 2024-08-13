@@ -10,8 +10,8 @@ import (
 	"net/http"
 )
 
-// GlobalResponseHandler 全局统一响应Handler
-func GlobalResponseHandler() gin.HandlerFunc {
+// GlobalResponse 全局统一响应Handler
+func GlobalResponse() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Next()
 

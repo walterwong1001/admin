@@ -10,6 +10,7 @@ type PermissionRepository interface {
 	New(ctx context.Context, db *gorm.DB, obj *models.Permission) error
 	Delete(ctx context.Context, db *gorm.DB, id uint64) error
 	Update(ctx context.Context, db *gorm.DB, obj *models.Permission) error
+	All(ctx context.Context, db *gorm.DB) []*models.Permission
 }
 
 type permissionRepositoryImpl struct{}
@@ -28,4 +29,10 @@ func (r *permissionRepositoryImpl) Delete(ctx context.Context, db *gorm.DB, id u
 
 func (r *permissionRepositoryImpl) Update(ctx context.Context, db *gorm.DB, obj *models.Permission) error {
 	return db.WithContext(ctx).Save(obj).Error
+}
+
+func (r *permissionRepositoryImpl) All(ctx context.Context, db *gorm.DB) []*models.Permission {
+	var arr []*models.Permission
+	db.WithContext(ctx).Find(&arr)
+	return arr
 }

@@ -15,6 +15,7 @@ func RegisterRoutes(router *gin.Engine) {
 		handlers.RoleHandler(),
 		handlers.PermissionHandler(),
 		handlers.RolePermissionHandler(),
+		handlers.UserRoleHandler(),
 	}
 
 	for _, r := range routers {

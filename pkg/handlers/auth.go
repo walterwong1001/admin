@@ -2,22 +2,27 @@ package handlers
 
 import (
 	"errors"
-	"github.com/weitien/admin/pkg/global"
-	"github.com/weitien/admin/pkg/models"
-	"github.com/weitien/admin/pkg/response"
-	"github.com/weitien/admin/pkg/token"
-	"strconv"
+	"fmt"
 
 	"github.com/gin-gonic/gin"
 	"github.com/weitien/admin/auth"
+	"github.com/weitien/admin/pkg/global"
+	"github.com/weitien/admin/pkg/models"
+	"github.com/weitien/admin/pkg/response"
+	"github.com/weitien/admin/pkg/services"
+	"github.com/weitien/admin/pkg/token"
 )
 
-type authHandler struct{}
+type authHandler struct {
+	service services.UserRoleService
+}
 
 var jwt = global.CONFIG.Jwt
 
 func AuthHandler() *authHandler {
-	return &authHandler{}
+	return &authHandler{
+		service: services.NewUserRoleService(),
+	}
 }
 
 func (h *authHandler) RegisterRoutes(r *gin.RouterGroup) {
@@ -41,8 +46,11 @@ func (h *authHandler) Authenticate(c *gin.Context) {
 		abort(c, err)
 		return
 	}
-	sub := strconv.Itoa(int(acc.UserID))
-	jwt, err := token.NewJWT(sub, sub, jwt.Days, jwt.SecretKey, jwt.Issuer)
+
+	roles := h.service.GetRolesByUser(c.Request.Context(), acc.UserID)
+	sub := fmt.Sprintf("%d", acc.UserID)
+	jwt, err := token.NewJWT(sub, sub, jwt.Days, jwt.SecretKey, jwt.Issuer, roles)
+
 	if err != nil {
 		abort(c, err)
 		return

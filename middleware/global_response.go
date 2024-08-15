@@ -60,12 +60,12 @@ func (e *NotRouteOrNoMethodError) Error() string {
 
 // NoRoute 404 错误处理器
 func NoRoute(c *gin.Context) {
-	c.Error(&NotRouteOrNoMethodError{http.StatusNotFound, "Not found"})
+	_ = c.Error(&NotRouteOrNoMethodError{http.StatusNotFound, "Not found"})
 	c.Abort()
 }
 
 // NoMethod 方法不匹配处理器
 func NoMethod(c *gin.Context) {
-	c.Error(&NotRouteOrNoMethodError{http.StatusMethodNotAllowed, "Method not allowed"})
+	_ = c.Error(&NotRouteOrNoMethodError{http.StatusMethodNotAllowed, "Method not allowed"})
 	c.Abort()
 }

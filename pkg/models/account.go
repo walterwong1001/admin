@@ -3,7 +3,7 @@ package models
 type AccountType uint8
 
 const (
-	AccountTypeUsername AccountType = iota
+	AccountTypeUsername AccountType = iota + 1
 	AccountTypeEmail
 	AccountTypeMobile
 )

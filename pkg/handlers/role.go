@@ -29,6 +29,7 @@ func (h *roleHandler) New(c *gin.Context) {
 	}
 
 	obj.ID = nextId()
+	obj.CreateTime = createTime()
 
 	if err := h.service.New(c.Request.Context(), &obj); err != nil {
 		abort(c, err)

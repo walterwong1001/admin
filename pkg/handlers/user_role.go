@@ -9,21 +9,21 @@ import (
 	"github.com/weitien/admin/pkg/services"
 )
 
-type rolePermissionHandler struct {
-	service services.RolePermissionService
+type userRoleHandler struct {
+	service services.UserRoleService
 }
 
-func RolePermissionHandler() *rolePermissionHandler {
-	return &rolePermissionHandler{service: services.NewRolePermissionService()}
+func UserRoleHandler() *userRoleHandler {
+	return &userRoleHandler{service: services.NewUserRoleService()}
 }
 
-func (h *rolePermissionHandler) RegisterRoutes(r *gin.RouterGroup) {
-	r.POST("/role_permission/binding", h.Binding)
-	r.DELETE("/role_permission/binding", h.Binding)
+func (h *userRoleHandler) RegisterRoutes(r *gin.RouterGroup) {
+	r.POST("/user_role/binding", h.Binding)
+	r.DELETE("/user_role/binding", h.Binding)
 }
 
-func (h *rolePermissionHandler) Binding(c *gin.Context) {
-	var obj models.RolePermission
+func (h *userRoleHandler) Binding(c *gin.Context) {
+	var obj models.UserRole
 
 	if err := c.Bind(&obj); err != nil {
 		abort(c, err)

@@ -51,7 +51,8 @@ func Authorization() gin.HandlerFunc {
 					}
 				}
 			}
-
+			// 将用户ID保存在上线文中
+			c.Set("CURRENT_USER_ID", claims.ID)
 		}
 
 		c.JSON(http.StatusForbidden, response.Error(http.StatusForbidden, "Forbidden"))

@@ -14,5 +14,6 @@ type AccessLog struct {
 	HttpXForwardedFor string `json:"http_x_forwarded_for" mapstructure:"http_x_forwarded_for"` // X-Forwarded-For头信息，表示代理或负载均衡器传递的客户端IP
 	RequestTime       uint64 `json:"request_time" mapstructure:"request_time"`                 // 请求处理的耗时（毫秒）
 	RequestBody       string `json:"request_body" mapstructure:"request_body"`                 // 请求体内容（如POST数据）
-	Timestamp         uint64 `json:"timestamp" mapstructure:"timestamp"`                       // 日志记录时间戳（UNIX时间戳，毫秒）
+	Error             string `json:"error" mapstructure:"error"`
+	Timestamp         uint64 `json:"timestamp" mapstructure:"timestamp"` // 日志记录时间戳（UNIX时间戳，毫秒）
 }

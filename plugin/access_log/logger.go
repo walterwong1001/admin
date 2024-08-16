@@ -5,26 +5,25 @@ import (
 	"fmt"
 )
 
+// Logger is an interface that defines a logging method.
+// Implementations of this interface are responsible for processing the log data.
 type Logger interface {
-	Log(ctx context.Context, metric map[string]any)
+	// Log logs the provided metrics.
+	// The context can be used to pass additional information or to manage timeouts.
+	// Returns an error if logging fails.
+	Log(ctx context.Context, metric map[string]any) error
 }
 
+// ConsoleLog is a simple logger that prints the metrics to the console.
+// Useful for debugging or local development.
 type ConsoleLog struct{}
 
-func (l *ConsoleLog) Log(ctx context.Context, metric map[string]any) {
+// Log prints the metrics to the console.
+// It iterates over the key-value pairs in the metrics map and prints each pair.
+// Returns nil as there are no errors expected in console logging.
+func (l *ConsoleLog) Log(ctx context.Context, metric map[string]any) error {
 	for k, v := range metric {
 		fmt.Printf("%s: %v \n", k, v)
 	}
-}
-
-type LogAppender interface {
-	Append(ctx context.Context, metric map[string]any) error
-}
-
-type DBLog struct {
-	Appender LogAppender
-}
-
-func (l *DBLog) Log(ctx context.Context, metric map[string]any) {
-	l.Appender.Append(ctx, metric)
+	return nil
 }

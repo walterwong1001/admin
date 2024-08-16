@@ -18,7 +18,6 @@ import (
 	"github.com/weitien/admin/pkg/routes"
 	"github.com/weitien/admin/pkg/services"
 	"github.com/weitien/admin/pkg/validator"
-	accesslog "github.com/weitien/admin/plugin/access_log"
 )
 
 var machineId uint16
@@ -31,11 +30,7 @@ func main() {
 
 	validator.InitValidator()
 
-	logger := &accesslog.DBLog{
-		Appender: services.NewAccessLogService(),
-	}
-
-	r.Use(middleware.Authorization(), middleware.RequestElapsed(), middleware.AccessLog(logger), middleware.GlobalResponse())
+	r.Use(middleware.Authorization(), middleware.RequestElapsed(), middleware.AccessLog(services.NewAccessLogService()), middleware.GlobalResponse())
 
 	r.HandleMethodNotAllowed = true
 	r.NoRoute(middleware.NoRoute)

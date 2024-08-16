@@ -11,7 +11,7 @@ import (
 )
 
 type AccessLogService interface {
-	Append(ctx context.Context, metric map[string]any) error
+	Log(ctx context.Context, metric map[string]any) error
 }
 
 type accessLogServiceImpl struct {
@@ -23,7 +23,7 @@ func NewAccessLogService() AccessLogService {
 }
 
 // Append implements AccessLogService.
-func (s *accessLogServiceImpl) Append(ctx context.Context, metric map[string]any) error {
+func (s *accessLogServiceImpl) Log(ctx context.Context, metric map[string]any) error {
 	accLog := &models.AccessLog{}
 	err := mapstructure.Decode(metric, accLog)
 	if err != nil {

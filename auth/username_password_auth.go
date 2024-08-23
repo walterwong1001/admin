@@ -3,9 +3,9 @@ package auth
 import (
 	"errors"
 	"github.com/gin-gonic/gin"
-	"github.com/weitien/admin/pkg/models"
-	"github.com/weitien/admin/pkg/services"
-	"github.com/weitien/admin/pkg/utils"
+	"github.com/weitien/admin/internal/models"
+	"github.com/weitien/admin/internal/services"
+	"github.com/weitien/admin/pkg/crypto"
 )
 
 // 用户名密码认证
@@ -22,7 +22,7 @@ func (s *usernamePasswordAuthentication) Authenticate(c *gin.Context, a *models.
 	if acc == nil {
 		return nil, errors.New("invalid user name")
 	}
-	b := utils.Matches(acc.Password, a.Secret)
+	b := crypto.Matches(acc.Password, a.Secret)
 	if b {
 		return acc, nil
 	}

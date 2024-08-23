@@ -4,6 +4,8 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/weitien/admin/global"
+	"github.com/weitien/admin/pkg/validator"
 	"log"
 	"net/http"
 	"os"
@@ -12,12 +14,10 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/weitien/admin/internal/machine"
+	"github.com/weitien/admin/internal/routes"
+	"github.com/weitien/admin/internal/services"
 	"github.com/weitien/admin/middleware"
-	"github.com/weitien/admin/pkg/global"
-	"github.com/weitien/admin/pkg/machine"
-	"github.com/weitien/admin/pkg/routes"
-	"github.com/weitien/admin/pkg/services"
-	"github.com/weitien/admin/pkg/validator"
 )
 
 var machineId uint16

@@ -2,16 +2,16 @@ package middleware
 
 import (
 	"context"
+	"github.com/weitien/admin/global"
+	"github.com/weitien/admin/pkg/response"
+	"github.com/weitien/admin/pkg/token"
 	"log"
 	"net/http"
 	"strings"
 
 	"github.com/gin-gonic/gin"
-	"github.com/weitien/admin/pkg/global"
-	"github.com/weitien/admin/pkg/response"
-	"github.com/weitien/admin/pkg/services"
-	"github.com/weitien/admin/pkg/token"
-	"github.com/weitien/admin/plugin/trie"
+	"github.com/weitien/admin/internal/services"
+	"github.com/weitien/admin/pkg/trie"
 )
 
 var cache = trie.New[meta]()
@@ -51,7 +51,7 @@ func Authorization() gin.HandlerFunc {
 					}
 				}
 			}
-			// 将用户ID保存在上线文中
+			// 将用户ID保存在上下文中
 			c.Set("CURRENT_USER_ID", claims.ID)
 		}
 

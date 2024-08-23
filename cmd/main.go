@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/weitien/admin/global"
+	mdw "github.com/weitien/admin/internal/middleware"
 	"github.com/weitien/admin/pkg/validator"
 	"log"
 	"net/http"
@@ -30,7 +31,7 @@ func main() {
 
 	validator.InitValidator()
 
-	r.Use(middleware.Authorization(), middleware.RequestElapsed(), middleware.AccessLog(services.NewAccessLogService()), middleware.GlobalResponse())
+	r.Use(mdw.Authorization(), middleware.RequestElapsed(), middleware.AccessLog(services.NewAccessLogService()), middleware.GlobalResponse())
 
 	r.HandleMethodNotAllowed = true
 	r.NoRoute(middleware.NoRoute)

@@ -2,8 +2,8 @@ package handlers
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/weitien/admin/internal/models"
-	"github.com/weitien/admin/internal/services"
+	"github.com/walterwong1001/admin/internal/models"
+	"github.com/walterwong1001/admin/internal/services"
 )
 
 type accountHandler struct {

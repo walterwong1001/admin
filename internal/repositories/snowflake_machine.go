@@ -1,7 +1,7 @@
 package repositories
 
 import (
-	"github.com/weitien/admin/internal/models"
+	"github.com/walterwong1001/admin/internal/models"
 )
 
 type SnowflakeMachineRepository struct{}

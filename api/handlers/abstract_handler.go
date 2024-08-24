@@ -3,8 +3,8 @@ package handlers
 import (
 	"errors"
 	"github.com/gin-gonic/gin"
-	"github.com/weitien/admin/internal/machine"
-	"github.com/weitien/admin/pkg/response"
+	"github.com/walterwong1001/admin/internal/machine"
+	"github.com/walterwong1001/gin_common_libs/pkg/response"
 	"strconv"
 	"time"
 )

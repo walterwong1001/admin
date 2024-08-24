@@ -2,8 +2,8 @@ package services
 
 import (
 	"context"
-	"github.com/weitien/admin/internal/models"
-	"github.com/weitien/admin/internal/repositories"
+	"github.com/walterwong1001/admin/internal/models"
+	"github.com/walterwong1001/admin/internal/repositories"
 )
 
 type NavigationServicer interface {

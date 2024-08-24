@@ -2,9 +2,9 @@ package handlers
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/weitien/admin/internal/models"
-	"github.com/weitien/admin/internal/services"
-	"github.com/weitien/admin/pkg/crypto"
+	"github.com/walterwong1001/admin/internal/models"
+	"github.com/walterwong1001/admin/internal/services"
+	"github.com/walterwong1001/gin_common_libs/pkg/crypto"
 )
 
 type userHandler struct {

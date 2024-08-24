@@ -2,7 +2,7 @@ package routes
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/weitien/admin/api/handlers"
+	"github.com/walterwong1001/admin/api/handlers"
 )
 
 func RegisterRoutes(router *gin.Engine) {

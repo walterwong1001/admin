@@ -2,7 +2,7 @@ package repositories
 
 import (
 	"fmt"
-	"github.com/weitien/admin/global"
+	"github.com/walterwong1001/admin/global"
 	"log"
 
 	"gorm.io/driver/mysql"

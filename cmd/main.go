@@ -4,9 +4,10 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/weitien/admin/global"
-	mdw "github.com/weitien/admin/internal/middleware"
-	"github.com/weitien/admin/pkg/validator"
+	"github.com/walterwong1001/admin/global"
+	mdw "github.com/walterwong1001/admin/internal/middleware"
+	"github.com/walterwong1001/gin_common_libs/middleware"
+	"github.com/walterwong1001/gin_common_libs/pkg/validator"
 	"log"
 	"net/http"
 	"os"
@@ -15,10 +16,9 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/weitien/admin/internal/machine"
-	"github.com/weitien/admin/internal/routes"
-	"github.com/weitien/admin/internal/services"
-	"github.com/weitien/admin/middleware"
+	"github.com/walterwong1001/admin/internal/machine"
+	"github.com/walterwong1001/admin/internal/routes"
+	"github.com/walterwong1001/admin/internal/services"
 )
 
 var machineId uint16

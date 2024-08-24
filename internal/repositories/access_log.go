@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 
-	"github.com/weitien/admin/internal/models"
+	"github.com/walterwong1001/admin/internal/models"
 	"gorm.io/gorm"
 )
 

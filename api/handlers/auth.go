@@ -3,14 +3,14 @@ package handlers
 import (
 	"errors"
 	"fmt"
-	"github.com/weitien/admin/global"
-	"github.com/weitien/admin/pkg/response"
-	"github.com/weitien/admin/pkg/token"
+	"github.com/walterwong1001/admin/global"
+	"github.com/walterwong1001/gin_common_libs/pkg/response"
+	"github.com/walterwong1001/gin_common_libs/pkg/token"
 
 	"github.com/gin-gonic/gin"
-	"github.com/weitien/admin/auth"
-	"github.com/weitien/admin/internal/models"
-	"github.com/weitien/admin/internal/services"
+	"github.com/walterwong1001/admin/auth"
+	"github.com/walterwong1001/admin/internal/models"
+	"github.com/walterwong1001/admin/internal/services"
 )
 
 type authHandler struct {

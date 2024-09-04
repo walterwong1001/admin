@@ -15,3 +15,11 @@ type Profile struct {
 	Avatar   string `json:"avatar"`
 	Motto    string `json:"motto"` // 个性签名，座右铭，箴言
 }
+
+type UserInfo struct {
+	ID     uint64 `json:"id"`
+	Name   string `json:"name"`
+	Avatar string `json:"avatar"`
+	Email  string `json:"email"`
+	Mobile string `json:"mobile"`
+}

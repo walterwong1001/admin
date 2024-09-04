@@ -10,6 +10,7 @@ type NavigationServicer interface {
 	New(ctx context.Context, nav *models.Navigation) error
 	Delete(ctx context.Context, id uint64) error
 	Update(ctx context.Context, nav *models.Navigation) error
+	All(ctx context.Context) []*models.Navigation
 }
 
 type navigationService struct {
@@ -30,4 +31,8 @@ func (s *navigationService) Delete(ctx context.Context, id uint64) error {
 
 func (s *navigationService) Update(ctx context.Context, nav *models.Navigation) error {
 	return s.repository.Update(ctx, repositories.GetDB(), nav)
+}
+
+func (s *navigationService) All(ctx context.Context) []*models.Navigation {
+	return s.repository.All(ctx, repositories.GetDB())
 }

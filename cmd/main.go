@@ -2,18 +2,19 @@ package main
 
 import (
 	"context"
-	"errors"
+	// "errors"
 	"fmt"
-	"github.com/walterwong1001/admin/global"
-	mdw "github.com/walterwong1001/admin/internal/middleware"
-	"github.com/walterwong1001/gin_common_libs/middleware"
-	"github.com/walterwong1001/gin_common_libs/pkg/validator"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
+
+	"github.com/walterwong1001/admin/global"
+	// mdw "github.com/walterwong1001/admin/internal/middleware"
+	"github.com/walterwong1001/gin_common_libs/middleware"
+	"github.com/walterwong1001/gin_common_libs/pkg/validator"
 
 	"github.com/gin-gonic/gin"
 	"github.com/walterwong1001/admin/internal/machine"
@@ -31,7 +32,7 @@ func main() {
 
 	validator.InitValidator()
 
-	r.Use(mdw.Authorization(), middleware.RequestElapsed(), middleware.AccessLog(services.NewAccessLogService()), middleware.GlobalResponse())
+	r.Use(middleware.RequestElapsed(), middleware.AccessLog(services.NewAccessLogService()), middleware.GlobalResponse())
 
 	r.HandleMethodNotAllowed = true
 	r.NoRoute(middleware.NoRoute)
@@ -40,22 +41,24 @@ func main() {
 	// 加载路由配置
 	routes.RegisterRoutes(r)
 
+	r.Run(fmt.Sprintf(":%d", conf.Server.Port))
+
 	// Create the server
-	srv := &http.Server{
-		Addr:    fmt.Sprintf(":%d", conf.Server.Port),
-		Handler: r,
-	}
-	// Start the server in a goroutine
-	go func() {
-		if err := srv.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
-			log.Fatalf("listen: %s\n", err)
-		}
-	}()
+	// srv := &http.Server{
+	// 	Addr:    fmt.Sprintf(":%d", conf.Server.Port),
+	// 	Handler: r,
+	// }
+	// // Start the server in a goroutine
+	// go func() {
+	// 	if err := srv.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
+	// 		log.Fatalf("listen: %s\n", err)
+	// 	}
+	// }()
 
-	// Print the current process ID
-	log.Printf("Current process ID: %d\n", os.Getpid())
+	// // Print the current process ID
+	// log.Printf("Current process ID: %d\n", os.Getpid())
 
-	gracefulShutdown(srv)
+	// gracefulShutdown(srv)
 }
 
 func gracefulShutdown(srv *http.Server) {

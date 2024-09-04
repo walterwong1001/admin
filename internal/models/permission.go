@@ -8,13 +8,13 @@ const (
 )
 
 type Permission struct {
-	ID          uint64
-	Name        string `json:"name" binding:"required"`
-	Path        string `json:"path" binding:"required"`
-	Method      string `json:"method" binding:"required,http_method"`
-	Allowed     Allowed
-	Description string
-	CreateTime  int64
+	ID          uint64  `json:"id"`
+	Name        string  `json:"name" binding:"required"`
+	Path        string  `json:"path" binding:"required"`
+	Method      string  `json:"method" binding:"required,http_method"`
+	Allowed     Allowed `json:"allowed"`
+	Description string  `json:"description"`
+	CreateTime  int64   `json:"create_time"`
 }
 
 func (p *Permission) IsAllowed() bool {

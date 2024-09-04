@@ -19,6 +19,7 @@ func (h *navigationHandler) RegisterRoutes(r *gin.RouterGroup) {
 	r.POST("/navigation", h.New)
 	r.DELETE("/navigation/:id", h.Delete)
 	r.PUT("/navigation", h.Update)
+	r.GET("/navigation/all", h.All)
 }
 
 func (h *navigationHandler) New(c *gin.Context) {
@@ -62,4 +63,8 @@ func (h *navigationHandler) Update(c *gin.Context) {
 	if err := h.service.Update(c.Request.Context(), &nav); err != nil {
 		abortWithMessage(c, err, "failed to update navigation")
 	}
+}
+
+func (h *navigationHandler) All(c *gin.Context) {
+	render(c, h.service.All(c.Request.Context()))
 }

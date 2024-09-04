@@ -15,6 +15,7 @@ import (
 )
 
 var cache = trie.New[meta]()
+var allowList = trie.New[meta]()
 
 type meta struct {
 	allowed bool
@@ -24,35 +25,41 @@ type meta struct {
 func Authorization() gin.HandlerFunc {
 	initAccessCache()
 	return func(c *gin.Context) {
+		// 拆分Path
+		segments := append(strings.Split(strings.Replace(c.Request.URL.Path, "/api/", "", 1), "/"), c.Request.Method)
+		// 匹配白名单
+		_meta := allowList.Find(segments)
+		if _meta != nil {
+			c.Next()
+			return
+		}
+
 		//获取 Authorization 头部信息，解析token
 		claims, err := token.ParseJWT(c.GetHeader("Authorization"), global.CONFIG.Jwt.SecretKey)
 		if err != nil {
 			log.Printf("%v", err)
+			c.JSON(http.StatusForbidden, response.Error(http.StatusForbidden, "None token or token is expired"))
+			c.Abort()
+			return
 		}
-		// 拆分Path
-		segments := append(strings.Split(strings.Replace(c.Request.URL.Path, "/api/", "", 1), "/"), c.Request.Method)
+
 		// 匹配权限
-		_meta := cache.Find(segments)
+		_meta = cache.Find(segments)
 
 		if _meta != nil {
-			// 白名单
-			if _meta.allowed {
-				c.Next()
-				return
-			}
 			if claims != nil && claims.Roles != nil {
 				// 对比token中的role和权限中绑定的role
 				for _, r1 := range _meta.roles {
 					for _, r2 := range claims.Roles {
 						if r1 == r2 {
+							// 将用户ID保存在上下文中
+							c.Set(global.KEY_CURRENT_USER_ID, claims.ID)
 							c.Next()
 							return
 						}
 					}
 				}
 			}
-			// 将用户ID保存在上下文中
-			c.Set("CURRENT_USER_ID", claims.ID)
 		}
 
 		c.JSON(http.StatusForbidden, response.Error(http.StatusForbidden, "Forbidden"))
@@ -82,7 +89,11 @@ func initAccessCache() {
 		_meta := meta{
 			allowed: p.IsAllowed(),
 		}
-		if !p.IsAllowed() {
+
+		if p.IsAllowed() {
+			allowList.Add(segments, _meta)
+			continue
+		} else {
 			_meta.roles = m[p.ID]
 		}
 		cache.Add(segments, _meta)

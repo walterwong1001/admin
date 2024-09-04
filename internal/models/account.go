@@ -1,11 +1,11 @@
 package models
 
-type AccountType uint8
+type AccountType string
 
 const (
-	AccountTypeUsername AccountType = iota + 1
-	AccountTypeEmail
-	AccountTypeMobile
+	AccountTypeUsername AccountType = "username"
+	AccountTypeEmail    AccountType = "email"
+	AccountTypeMobile   AccountType = "mobile"
 )
 
 const (

@@ -13,6 +13,7 @@ type AccountRepository interface {
 	Delete(ctx context.Context, db *gorm.DB, userId uint64) error
 	ChangeStatus(ctx context.Context, db *gorm.DB, id uint64, status uint8) error
 	GetByType(ctx context.Context, db *gorm.DB, identifier string, accType models.AccountType) *models.Account
+	GetByUser(ctx context.Context, db *gorm.DB, userId uint64) []*models.Account
 }
 
 type accountRepositoryImpl struct{}
@@ -48,4 +49,15 @@ func (r *accountRepositoryImpl) GetByType(ctx context.Context, db *gorm.DB, iden
 		}
 	}
 	return &acc
+}
+
+func (r *accountRepositoryImpl) GetByUser(ctx context.Context, db *gorm.DB, userId uint64) []*models.Account {
+	var accs []*models.Account
+	tx := db.WithContext(ctx).Find(&accs)
+	if tx.Error != nil {
+		if errors.Is(tx.Error, gorm.ErrRecordNotFound) {
+			return nil
+		}
+	}
+	return accs
 }

@@ -1,11 +1,13 @@
 package models
 
 type Navigation struct {
-	ID     uint64
-	PID    uint64 `json:"pid" gorm:"column:pid"`
-	Title  string `json:"title" binding:"required"`
-	URI    string
-	Icon   string
-	Header string
-	Seq    uint8
+	ID        uint64 `json:"id"`
+	PID       uint64 `json:"pid,omitempty" gorm:"column:pid"`
+	Name      string `json:"name" binding:"required"`
+	Path      string `json:"path,omitempty" binding:"required"`
+	Icon      string `json:"icon,omitempty"`
+	Component string `json:"component,omitempty"`
+	Redirect  string `json:"redirect,omitempty"`
+	Header    string `json:"header,omitempty"`
+	Seq       uint8  `json:"seq"`
 }

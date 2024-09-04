@@ -2,11 +2,11 @@ package handlers
 
 import (
 	"errors"
+	"github.com/walterwong1001/gin_common_libs/pkg/page"
 
 	"github.com/gin-gonic/gin"
 	"github.com/walterwong1001/admin/internal/models"
 	"github.com/walterwong1001/admin/internal/services"
-	"github.com/walterwong1001/admin/page"
 )
 
 type roleHandler struct {

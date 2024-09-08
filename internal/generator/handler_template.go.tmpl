@@ -1,0 +1,65 @@
+package handlers
+
+import (
+	"errors"
+	"github.com/gin-gonic/gin"
+	"github.com/walterwong1001/admin/pkg/models"
+	"github.com/walterwong1001/admin/pkg/services"
+)
+
+type {{.LowerName}}Handler struct {
+	service services.{{.UpperName}}Service
+}
+
+func {{.UpperName}}Handler() *{{.LowerName}}Handler {
+	return &{{.LowerName}}Handler{service: services.New{{.UpperName}}Service()}
+}
+
+func (h *{{.LowerName}}Handler) RegisterRoutes(r *gin.RouterGroup) {
+	r.POST("/{{.LowerName}}", h.New)
+	r.DELETE("/{{.LowerName}}/:id", h.Delete)
+	r.PUT("/{{.LowerName}}", h.Update)
+}
+
+func (h *{{.LowerName}}Handler) New(c *gin.Context) {
+	var obj models.{{.UpperName}}
+	if err := c.Bind(&obj); err != nil {
+		abort(c, err)
+		return
+	}
+
+	obj.ID = nextId()
+
+	if err := h.service.New(c.Request.Context(), &obj); err != nil {
+		abort(c, err)
+	}
+}
+
+func (h *{{.LowerName}}Handler) Delete(c *gin.Context) {
+	id, err := getPathParamAsInt(c, "id")
+	if err != nil {
+		abort(c, err)
+		return
+	}
+
+	if err := h.service.Delete(c.Request.Context(), id); err != nil {
+		abortWithMessage(c, err, "failed to delete {{.LowerName}}")
+	}
+}
+
+func (h *{{.LowerName}}Handler) Update(c *gin.Context) {
+	var obj models.{{.UpperName}}
+	if err := c.Bind(&obj); err != nil {
+		abort(c, err)
+		return
+	}
+
+	if obj.ID == 0 {
+		abort(c, errors.New("ID not specified"))
+		return
+	}
+
+	if err := h.service.Update(c.Request.Context(), &obj); err != nil {
+		abortWithMessage(c, err, "failed to update {{.LowerName}}")
+	}
+}

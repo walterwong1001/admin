@@ -2,6 +2,6 @@ package routes
 
 import "github.com/gin-gonic/gin"
 
-type IRoute interface {
+type Router interface {
 	RegisterRoutes(route *gin.RouterGroup)
 }

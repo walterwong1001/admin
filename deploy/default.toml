@@ -1,0 +1,21 @@
+application = "cloud"
+
+locale = "zh"
+
+[server]
+    port = 8080
+    
+[mysql]
+    username = "root"
+    password = "root2024"
+    host = "localhost"
+    port = 3306
+    database = "admin"
+
+[snowflake]
+    register = "mysql"
+
+[jwt]
+    secret_key = "1234567890!@#$%^&*()qwertyuiop"
+    issuer = "cloud"
+    days = 7

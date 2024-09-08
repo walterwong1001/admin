@@ -1,0 +1,33 @@
+package services
+
+import (
+	"context"
+	"github.com/walterwong1001/admin/pkg/models"
+	"github.com/walterwong1001/admin/pkg/repositories"
+)
+
+type {{.UpperName}}Service interface {
+	New(ctx context.Context, obj *models.{{.UpperName}}) error
+	Delete(ctx context.Context, id uint64) error
+	Update(ctx context.Context, obj *models.{{.UpperName}}) error
+}
+
+type {{.LowerName}}ServiceImpl struct {
+	repository repositories.{{.UpperName}}Repository
+}
+
+func New{{.UpperName}}Service() {{.UpperName}}Service {
+	return &{{.LowerName}}ServiceImpl{repositories.New{{.UpperName}}Repository()}
+}
+
+func (s *{{.LowerName}}ServiceImpl) New(ctx context.Context, obj *models.{{.UpperName}}) error {
+	return s.repository.New(ctx, repositories.GetDB(), obj)
+}
+
+func (s *{{.LowerName}}ServiceImpl) Delete(ctx context.Context, id uint64) error {
+	return s.repository.Delete(ctx, repositories.GetDB(), id)
+}
+
+func (s *{{.LowerName}}ServiceImpl) Update(ctx context.Context, obj *models.{{.UpperName}}) error {
+	return s.repository.Update(ctx, repositories.GetDB(), obj)
+}

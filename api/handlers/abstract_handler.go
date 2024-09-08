@@ -69,7 +69,7 @@ func queryParams[T any](c *gin.Context) (T, error) {
 }
 
 // pagination 抽象分页逻辑
-func pagination[T, F any](c *gin.Context, service services.Paginator[T, F]) {
+func pagination[T, F any](c *gin.Context, service services.Paginator[T, F], callback func(c *gin.Context, p page.Paginator[T]) any) {
 	// 分页信息
 	p, err := paginator[T](c)
 	if err != nil {
@@ -86,6 +86,11 @@ func pagination[T, F any](c *gin.Context, service services.Paginator[T, F]) {
 	err = service.Pagination(c.Request.Context(), p, filter)
 	if err != nil {
 		abort(c, err)
+		return
+	}
+	if callback != nil {
+		r := callback(c, p)
+		render(c, r)
 		return
 	}
 	render(c, p)

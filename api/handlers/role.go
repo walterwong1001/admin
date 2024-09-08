@@ -73,5 +73,5 @@ func (h *roleHandler) All(c *gin.Context) {
 }
 
 func (h *roleHandler) Pagination(c *gin.Context) {
-	pagination[*models.Role, *models.RoleFilter](c, h.service)
+	pagination[*models.Role, *models.RoleFilter](c, h.service, nil)
 }

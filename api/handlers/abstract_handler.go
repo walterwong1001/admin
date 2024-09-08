@@ -2,11 +2,13 @@ package handlers
 
 import (
 	"errors"
-	"github.com/gin-gonic/gin"
-	"github.com/walterwong1001/admin/internal/machine"
-	"github.com/walterwong1001/gin_common_libs/pkg/response"
 	"strconv"
 	"time"
+
+	"github.com/gin-gonic/gin"
+	"github.com/walterwong1001/admin/internal/machine"
+	"github.com/walterwong1001/gin_common_libs/pkg/page"
+	"github.com/walterwong1001/gin_common_libs/pkg/response"
 )
 
 type AbstractHandler struct {
@@ -38,4 +40,27 @@ func createTime() int64 {
 
 func render(c *gin.Context, data any) {
 	c.Set(response.DATA_KEY, data)
+}
+
+func paginator[T any](c *gin.Context) (page.Paginator[T], error) {
+	current, err := getPathParamAsInt(c, "current")
+	if err != nil {
+		abort(c, err)
+		return nil, err
+	}
+	pageSize, err := getPathParamAsInt(c, "size")
+	if err != nil {
+		abort(c, err)
+		return nil, err
+	}
+	return page.NewPagination[T](int(current), int(pageSize)), nil
+}
+
+func queryParams[T any](c *gin.Context) (T, error) {
+	var filter T
+	if err := c.ShouldBindQuery(&filter); err != nil {
+		abort(c, err)
+		return filter, err
+	}
+	return filter, nil
 }

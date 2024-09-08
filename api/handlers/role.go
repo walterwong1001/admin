@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"errors"
-	"github.com/walterwong1001/gin_common_libs/pkg/page"
 
 	"github.com/gin-gonic/gin"
 	"github.com/walterwong1001/admin/internal/models"
@@ -22,7 +21,7 @@ func (h *roleHandler) RegisterRoutes(r *gin.RouterGroup) {
 	r.DELETE("/role/:id", h.Delete)
 	r.PUT("/role", h.Update)
 	r.GET("/role/all", h.All)
-	r.GET("/role/:current/:pageSize", h.Pagination)
+	r.GET("/role/:current/:size", h.Pagination)
 }
 
 func (h *roleHandler) New(c *gin.Context) {
@@ -74,23 +73,15 @@ func (h *roleHandler) All(c *gin.Context) {
 }
 
 func (h *roleHandler) Pagination(c *gin.Context) {
-	current, err := getPathParamAsInt(c, "current")
+	p, err := paginator[*models.Role](c)
+
 	if err != nil {
-		abort(c, err)
-		return
-	}
-	pageSize, err := getPathParamAsInt(c, "pageSize")
-	if err != nil {
-		abort(c, err)
 		return
 	}
 
-	p := page.NewPagination[*models.Role](int(current), int(pageSize))
+	filter, err := queryParams[models.RoleFilter](c)
 
-	var filter models.RoleFilter
-
-	if err := c.ShouldBindQuery(&filter); err != nil {
-		abort(c, err)
+	if err != nil {
 		return
 	}
 

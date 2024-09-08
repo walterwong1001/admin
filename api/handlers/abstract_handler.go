@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"errors"
+	"github.com/walterwong1001/admin/internal/services"
 	"strconv"
 	"time"
 
@@ -42,20 +43,22 @@ func render(c *gin.Context, data any) {
 	c.Set(response.DATA_KEY, data)
 }
 
+// paginator 分页器
 func paginator[T any](c *gin.Context) (page.Paginator[T], error) {
 	current, err := getPathParamAsInt(c, "current")
 	if err != nil {
 		abort(c, err)
 		return nil, err
 	}
-	pageSize, err := getPathParamAsInt(c, "size")
+	size, err := getPathParamAsInt(c, "size")
 	if err != nil {
 		abort(c, err)
 		return nil, err
 	}
-	return page.NewPagination[T](int(current), int(pageSize)), nil
+	return page.NewPagination[T](int(current), int(size)), nil
 }
 
+// queryParams 查询参数
 func queryParams[T any](c *gin.Context) (T, error) {
 	var filter T
 	if err := c.ShouldBindQuery(&filter); err != nil {
@@ -63,4 +66,27 @@ func queryParams[T any](c *gin.Context) (T, error) {
 		return filter, err
 	}
 	return filter, nil
+}
+
+// pagination 抽象分页逻辑
+func pagination[T, F any](c *gin.Context, service services.Paginator[T, F]) {
+	// 分页信息
+	p, err := paginator[T](c)
+	if err != nil {
+		abort(c, err)
+		return
+	}
+	// 过滤参数
+	filter, err := queryParams[F](c)
+	if err != nil {
+		abort(c, err)
+		return
+	}
+
+	err = service.Pagination(c.Request.Context(), p, filter)
+	if err != nil {
+		abort(c, err)
+		return
+	}
+	render(c, p)
 }

@@ -73,22 +73,5 @@ func (h *roleHandler) All(c *gin.Context) {
 }
 
 func (h *roleHandler) Pagination(c *gin.Context) {
-	p, err := paginator[*models.Role](c)
-
-	if err != nil {
-		return
-	}
-
-	filter, err := queryParams[models.RoleFilter](c)
-
-	if err != nil {
-		return
-	}
-
-	err = h.service.Pagination(c.Request.Context(), p, &filter)
-	if err != nil {
-		abort(c, err)
-		return
-	}
-	render(c, p)
+	pagination[*models.Role, *models.RoleFilter](c, h.service)
 }

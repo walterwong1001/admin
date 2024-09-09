@@ -4,9 +4,11 @@ import (
 	"context"
 	"github.com/walterwong1001/admin/internal/models"
 	"github.com/walterwong1001/admin/internal/repositories"
+	"github.com/walterwong1001/gin_common_libs/page"
 )
 
 type PermissionService interface {
+	page.PaginationHelper[*models.Permission, *models.PermissionFilter]
 	New(ctx context.Context, obj *models.Permission) error
 	Delete(ctx context.Context, id uint64) error
 	Update(ctx context.Context, obj *models.Permission) error
@@ -35,4 +37,9 @@ func (s *permissionServiceImpl) Update(ctx context.Context, obj *models.Permissi
 
 func (s *permissionServiceImpl) All(ctx context.Context) []*models.Permission {
 	return s.repository.All(ctx, repositories.GetDB())
+}
+
+func (s *permissionServiceImpl) Pagination(ctx context.Context, p page.Paginator[*models.Permission], filter *models.PermissionFilter) error {
+	//TODO implement me
+	return nil
 }

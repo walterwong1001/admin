@@ -14,7 +14,7 @@ import (
 	"github.com/walterwong1001/admin/global"
 	// mdw "github.com/walterwong1001/admin/internal/middleware"
 	"github.com/walterwong1001/gin_common_libs/middleware"
-	"github.com/walterwong1001/gin_common_libs/pkg/validator"
+	"github.com/walterwong1001/gin_common_libs/validator"
 
 	"github.com/gin-gonic/gin"
 	"github.com/walterwong1001/admin/internal/machine"

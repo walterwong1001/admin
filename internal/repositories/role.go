@@ -3,7 +3,7 @@ package repositories
 import (
 	"context"
 	"errors"
-	"github.com/walterwong1001/gin_common_libs/pkg/page"
+	"github.com/walterwong1001/gin_common_libs/page"
 
 	"github.com/walterwong1001/admin/internal/models"
 	"gorm.io/gorm"

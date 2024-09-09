@@ -8,7 +8,8 @@ import (
 	"github.com/walterwong1001/admin/global"
 	"github.com/walterwong1001/admin/internal/models"
 	"github.com/walterwong1001/admin/internal/services"
-	"github.com/walterwong1001/gin_common_libs/pkg/crypto"
+	"github.com/walterwong1001/gin_common_libs/crypto"
+	. "github.com/walterwong1001/gin_common_libs/endpoints"
 )
 
 type userHandler struct {
@@ -40,9 +41,9 @@ func (h *userHandler) New(c *gin.Context) {
 		_ = c.Error(err)
 		return
 	}
-	user.ID = nextId()
+	user.ID = NextId()
 	user.Password = ciphertext
-	user.CreateTime = createTime()
+	user.CreateTime = CreateTime()
 
 	if err = h.service.New(c.Request.Context(), &user); err != nil {
 		_ = c.Error(err)
@@ -51,47 +52,47 @@ func (h *userHandler) New(c *gin.Context) {
 }
 
 func (h *userHandler) Get(c *gin.Context) {
-	id, err := getPathParamAsInt(c, "id")
+	id, err := PathParamAsInt(c, "id")
 	if err != nil {
-		abort(c, err)
+		Abort(c, err)
 		return
 	}
-	render(c, h.service.Get(c.Request.Context(), id))
+	Render(c, h.service.Get(c.Request.Context(), id))
 }
 
 func (h *userHandler) Delete(c *gin.Context) {
-	id, err := getPathParamAsInt(c, "id")
+	id, err := PathParamAsInt(c, "id")
 	if err != nil {
-		abort(c, err)
+		Abort(c, err)
 		return
 	}
 
 	if err := h.service.Delete(c.Request.Context(), id); err != nil {
-		abortWithMessage(c, err, "failed to delete user")
+		AbortWithMessage(c, err, "failed to delete user")
 	}
 }
 
 func (h *userHandler) All(c *gin.Context) {
-	render(c, h.service.All(c.Request.Context()))
+	Render(c, h.service.All(c.Request.Context()))
 }
 
 func (h *userHandler) CurrentUserInfo(c *gin.Context) {
 	v, exists := c.Get(global.KEY_CURRENT_USER_ID)
 	if !exists {
-		abort(c, errors.New("user not sign in"))
+		Abort(c, errors.New("user not sign in"))
 		return
 	}
 	s, ok := v.(string)
 	if !ok {
-		abort(c, errors.New("invalid user"))
+		Abort(c, errors.New("invalid user"))
 		return
 	}
 	id, err := strconv.ParseInt(s, 10, 64)
 	if err != nil {
-		abort(c, errors.New("invalid user id"))
+		Abort(c, errors.New("invalid user id"))
 		return
 	}
 	info := h.service.UserInfo(c.Request.Context(), uint64(id))
 
-	render(c, info)
+	Render(c, info)
 }

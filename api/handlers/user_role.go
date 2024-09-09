@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/walterwong1001/admin/internal/models"
 	"github.com/walterwong1001/admin/internal/services"
+	. "github.com/walterwong1001/gin_common_libs/endpoints"
 )
 
 type userRoleHandler struct {
@@ -26,7 +27,7 @@ func (h *userRoleHandler) Binding(c *gin.Context) {
 	var obj models.UserRole
 
 	if err := c.Bind(&obj); err != nil {
-		abort(c, err)
+		Abort(c, err)
 		return
 	}
 
@@ -41,6 +42,6 @@ func (h *userRoleHandler) Binding(c *gin.Context) {
 	}
 
 	if err != nil {
-		abort(c, err)
+		Abort(c, err)
 	}
 }

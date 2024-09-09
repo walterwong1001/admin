@@ -5,7 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/walterwong1001/admin/internal/models"
 	"github.com/walterwong1001/admin/internal/services"
-	"github.com/walterwong1001/gin_common_libs/pkg/crypto"
+	"github.com/walterwong1001/gin_common_libs/crypto"
 )
 
 // 用户名密码认证

@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/walterwong1001/admin/internal/models"
 	"github.com/walterwong1001/admin/internal/services"
+	. "github.com/walterwong1001/gin_common_libs/endpoints"
 )
 
 type roleHandler struct {
@@ -27,51 +28,51 @@ func (h *roleHandler) RegisterRoutes(r *gin.RouterGroup) {
 func (h *roleHandler) New(c *gin.Context) {
 	var obj models.Role
 	if err := c.Bind(&obj); err != nil {
-		abort(c, err)
+		Abort(c, err)
 		return
 	}
 
-	obj.ID = nextId()
-	obj.CreateTime = createTime()
+	obj.ID = NextId()
+	obj.CreateTime = CreateTime()
 
 	if err := h.service.New(c.Request.Context(), &obj); err != nil {
-		abort(c, err)
+		Abort(c, err)
 	}
 }
 
 func (h *roleHandler) Delete(c *gin.Context) {
-	id, err := getPathParamAsInt(c, "id")
+	id, err := PathParamAsInt(c, "id")
 	if err != nil {
-		abort(c, err)
+		Abort(c, err)
 		return
 	}
 
 	if err := h.service.Delete(c.Request.Context(), id); err != nil {
-		abortWithMessage(c, err, "failed to delete role")
+		AbortWithMessage(c, err, "failed to delete role")
 	}
 }
 
 func (h *roleHandler) Update(c *gin.Context) {
 	var obj models.Role
 	if err := c.Bind(&obj); err != nil {
-		abort(c, err)
+		Abort(c, err)
 		return
 	}
 
 	if obj.ID == 0 {
-		abort(c, errors.New("ID not specified"))
+		Abort(c, errors.New("ID not specified"))
 		return
 	}
 
 	if err := h.service.Update(c.Request.Context(), &obj); err != nil {
-		abortWithMessage(c, err, "failed to update role")
+		AbortWithMessage(c, err, "failed to update role")
 	}
 }
 
 func (h *roleHandler) All(c *gin.Context) {
-	render(c, h.service.All(c.Request.Context()))
+	Render(c, h.service.All(c.Request.Context()))
 }
 
 func (h *roleHandler) Pagination(c *gin.Context) {
-	pagination[*models.Role, *models.RoleFilter](c, h.service, nil)
+	Pagination[*models.Role, *models.RoleFilter](c, h.service, nil)
 }

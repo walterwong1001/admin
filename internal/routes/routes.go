@@ -3,11 +3,13 @@ package routes
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/walterwong1001/admin/api/handlers"
+	"github.com/walterwong1001/gin_common_libs/router"
 )
 
-func RegisterRoutes(router *gin.Engine) {
-	group := router.Group("/api")
-	routers := []Router{
+func RegisterRoutes(engine *gin.Engine) {
+
+	group := engine.Group("/api")
+	routers := []router.Router{
 		handlers.AuthHandler(),
 		handlers.UserHandler(),
 		handlers.AccountHandler(),

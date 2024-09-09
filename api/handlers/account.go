@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/walterwong1001/admin/internal/models"
 	"github.com/walterwong1001/admin/internal/services"
+	. "github.com/walterwong1001/gin_common_libs/endpoints"
 )
 
 type accountHandler struct {
@@ -20,25 +21,25 @@ func (h *accountHandler) RegisterRoutes(r *gin.RouterGroup) {
 }
 
 func (h *accountHandler) LockAccount(c *gin.Context) {
-	id, err := getPathParamAsInt(c, "id")
+	id, err := PathParamAsInt(c, "id")
 	if err != nil {
-		abort(c, err)
+		Abort(c, err)
 		return
 	}
 
 	if err := h.service.ChangeAccountStatus(c.Request.Context(), id, models.AccountLocked); err != nil {
-		abortWithMessage(c, err, "failed to lock account")
+		AbortWithMessage(c, err, "failed to lock account")
 	}
 }
 
 func (h *accountHandler) ActivateAccount(c *gin.Context) {
-	id, err := getPathParamAsInt(c, "id")
+	id, err := PathParamAsInt(c, "id")
 	if err != nil {
-		abort(c, err)
+		Abort(c, err)
 		return
 	}
 
 	if err := h.service.ChangeAccountStatus(c.Request.Context(), id, models.AccountActivity); err != nil {
-		abortWithMessage(c, err, "failed to activate account")
+		AbortWithMessage(c, err, "failed to activate account")
 	}
 }

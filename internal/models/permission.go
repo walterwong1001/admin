@@ -20,3 +20,5 @@ type Permission struct {
 func (p *Permission) IsAllowed() bool {
 	return p.Allowed == YES
 }
+
+type PermissionFilter struct{}

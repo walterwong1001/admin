@@ -4,13 +4,14 @@ import (
 	"errors"
 	"fmt"
 	"github.com/walterwong1001/admin/global"
-	"github.com/walterwong1001/gin_common_libs/pkg/response"
-	"github.com/walterwong1001/gin_common_libs/pkg/token"
+	"github.com/walterwong1001/gin_common_libs/response"
+	"github.com/walterwong1001/gin_common_libs/token"
 
 	"github.com/gin-gonic/gin"
 	"github.com/walterwong1001/admin/auth"
 	"github.com/walterwong1001/admin/internal/models"
 	"github.com/walterwong1001/admin/internal/services"
+	. "github.com/walterwong1001/gin_common_libs/endpoints"
 )
 
 type authHandler struct {
@@ -32,18 +33,18 @@ func (h *authHandler) RegisterRoutes(r *gin.RouterGroup) {
 func (h *authHandler) Authenticate(c *gin.Context) {
 	var credential models.AuthCredential
 	if err := c.BindJSON(&credential); err != nil {
-		abort(c, err)
+		Abort(c, err)
 		return
 	}
 
 	strategy := auth.GetAuthStrategy(credential.Type)
 	if strategy == nil {
-		abort(c, errors.New("invalid authentication type"))
+		Abort(c, errors.New("invalid authentication type"))
 		return
 	}
 	acc, err := strategy.Authenticate(c, &credential)
 	if err != nil {
-		abort(c, err)
+		Abort(c, err)
 		return
 	}
 
@@ -52,7 +53,7 @@ func (h *authHandler) Authenticate(c *gin.Context) {
 	jwt, err := token.NewJWT(sub, sub, jwt.Days, jwt.SecretKey, jwt.Issuer, roles)
 
 	if err != nil {
-		abort(c, err)
+		Abort(c, err)
 		return
 	}
 	c.Set(response.DATA_KEY, jwt)

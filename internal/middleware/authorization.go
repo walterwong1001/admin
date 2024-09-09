@@ -3,15 +3,15 @@ package middleware
 import (
 	"context"
 	"github.com/walterwong1001/admin/global"
-	"github.com/walterwong1001/gin_common_libs/pkg/response"
-	"github.com/walterwong1001/gin_common_libs/pkg/token"
+	"github.com/walterwong1001/gin_common_libs/response"
+	"github.com/walterwong1001/gin_common_libs/token"
 	"log"
 	"net/http"
 	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/walterwong1001/admin/internal/services"
-	"github.com/walterwong1001/gin_common_libs/pkg/trie"
+	"github.com/walterwong1001/gin_common_libs/trie"
 )
 
 var cache = trie.New[meta]()

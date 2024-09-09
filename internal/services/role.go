@@ -2,18 +2,18 @@ package services
 
 import (
 	"context"
-	"github.com/walterwong1001/gin_common_libs/pkg/page"
+	"github.com/walterwong1001/gin_common_libs/page"
 
 	"github.com/walterwong1001/admin/internal/models"
 	"github.com/walterwong1001/admin/internal/repositories"
 )
 
 type RoleService interface {
+	page.PaginationHelper[*models.Role, *models.RoleFilter]
 	New(ctx context.Context, obj *models.Role) error
 	Delete(ctx context.Context, id uint64) error
 	Update(ctx context.Context, obj *models.Role) error
 	All(ctx context.Context) []*models.Role
-	Pagination(ctx context.Context, p page.Paginator[*models.Role], filter *models.RoleFilter) error
 }
 
 type roleServiceImpl struct {

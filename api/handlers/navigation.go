@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/walterwong1001/admin/internal/models"
 	"github.com/walterwong1001/admin/internal/services"
+	. "github.com/walterwong1001/gin_common_libs/endpoints"
 )
 
 type navigationHandler struct {
@@ -25,46 +26,46 @@ func (h *navigationHandler) RegisterRoutes(r *gin.RouterGroup) {
 func (h *navigationHandler) New(c *gin.Context) {
 	var nav models.Navigation
 	if err := c.Bind(&nav); err != nil {
-		abort(c, err)
+		Abort(c, err)
 		return
 	}
 
-	nav.ID = nextId()
+	nav.ID = NextId()
 
 	if err := h.service.New(c.Request.Context(), &nav); err != nil {
-		abort(c, err)
+		Abort(c, err)
 	}
 }
 
 func (h *navigationHandler) Delete(c *gin.Context) {
-	id, err := getPathParamAsInt(c, "id")
+	id, err := PathParamAsInt(c, "id")
 	if err != nil {
-		abort(c, err)
+		Abort(c, err)
 		return
 	}
 
 	if err := h.service.Delete(c.Request.Context(), id); err != nil {
-		abortWithMessage(c, err, "failed to delete navigation")
+		AbortWithMessage(c, err, "failed to delete navigation")
 	}
 }
 
 func (h *navigationHandler) Update(c *gin.Context) {
 	var nav models.Navigation
 	if err := c.Bind(&nav); err != nil {
-		abort(c, err)
+		Abort(c, err)
 		return
 	}
 
 	if nav.ID == 0 {
-		abort(c, errors.New("ID not specified"))
+		Abort(c, errors.New("ID not specified"))
 		return
 	}
 
 	if err := h.service.Update(c.Request.Context(), &nav); err != nil {
-		abortWithMessage(c, err, "failed to update navigation")
+		AbortWithMessage(c, err, "failed to update navigation")
 	}
 }
 
 func (h *navigationHandler) All(c *gin.Context) {
-	render(c, h.service.All(c.Request.Context()))
+	Render(c, h.service.All(c.Request.Context()))
 }
